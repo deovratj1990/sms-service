@@ -1,4 +1,4 @@
-package com.sms.service;
+package com.sms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
