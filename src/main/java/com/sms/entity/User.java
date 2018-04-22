@@ -1,6 +1,7 @@
 package com.sms.entity;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +42,7 @@ public class User {
 	private String password;
 	
 	@OneToMany
-	private Room room;
+	private Set<Room> rooms;
 	
 	@Column
 	private ZonedDateTime residingFrom;
@@ -83,12 +84,16 @@ public class User {
 		this.password = password;
 	}
 
-	public Room getRoom() {
-		return room;
+	public Set<Room> getRooms() {
+		return rooms;
+	}
+	
+	public void addRoom(Room room) {
+		rooms.add(room);
 	}
 
-	public void setRoom(Room room) {
-		this.room = room;
+	public void setRooms(Set<Room> rooms) {
+		this.rooms = rooms;
 	}
 
 	public ZonedDateTime getResidingFrom() {

@@ -16,6 +16,12 @@ public class UserController {
 	private UserService userService;
 	
 	public ResponseEntity<ResponseDTO> register(@RequestBody RegisterDTO registerDTO) {
-		return new ResponseEntity<ResponseDTO>(HttpStatus.NO_CONTENT);
+		try {
+			userService.register(registerDTO);
+
+			return new ResponseEntity<ResponseDTO>(HttpStatus.NO_CONTENT);
+		} catch(Exception ex) {
+			return new ResponseEntity<ResponseDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
