@@ -5,7 +5,7 @@ import java.util.Map;
 public class ResponseDTO {
 	private String message;
 	
-	private Map<String, Object> data;
+	private Map<String, ?> data;
 
 	public String getMessage() {
 		return message;
@@ -15,15 +15,11 @@ public class ResponseDTO {
 		this.message = message;
 	}
 
-	public Map<String, Object> getData() {
+	public Map<String, ?> getData() {
 		return data;
 	}
-	
-	public void addData(String name, Object value) {
-		data.put(name, value);
-	}
 
-	public void setData(Map<String, Object> data) {
+	public void setData(Map<String, ?> data) {
 		this.data = data;
 	}
 }

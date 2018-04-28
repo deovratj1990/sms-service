@@ -1,12 +1,13 @@
 package com.sms.validation;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.sms.ValidationException;
+import com.sms.dto.member.LoginDTO;
 import com.sms.dto.member.RegisterDTO;
 import com.sms.entity.Room;
 import com.sms.repository.RoomRepository;
 import com.sms.repository.SocietyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserControllerValidator {
@@ -16,43 +17,63 @@ public class UserControllerValidator {
 	@Autowired
 	private RoomRepository roomRepository;
 	
-	public ValidationResult validateRegister(RegisterDTO registerDTO) {
+	public void validateRegister(RegisterDTO registerDTO) throws Exception {
 		ValidationResult validationResult = new ValidationResult();
 		
 		if(registerDTO.getSocietyId().equals(null)) {
-			validationResult.addError("Society is mandatory");
+			validationResult.addError("societyId", "Society is mandatory");
 		}
 		
 		if(registerDTO.getRoomId().equals(null)) {
-			validationResult.addError("Room is mandatory");
+			validationResult.addError("roomId", "Room is mandatory");
 		} else {
 			Room room = roomRepository.getOne(registerDTO.getRoomId());
 			
 			if(room != null) {
 				if(!room.getWing().getSociety().getId().equals(registerDTO.getSocietyId())) {
-					validationResult.addError("Invalid society");
+					validationResult.addError("roomId", "Invalid society");
 				}
 			} else {
-				validationResult.addError("Invalid room");
+				validationResult.addError("roomId", "Invalid room");
 			}
 		}
 		
 		if(registerDTO.getMobile().equals(null) || registerDTO.getMobile().equals("")) {
-			validationResult.addError("Mobile is mandatory");
+			validationResult.addError("mobile", "Mobile is mandatory");
 		} else if(registerDTO.getMobile().length() == 10) {
-			validationResult.addError("Invalid mobile");
+			validationResult.addError("mobile", "Invalid mobile");
 		}
 		
 		if(registerDTO.getPassword().equals(null) || registerDTO.getPassword().equals("")) {
-			validationResult.addError("Password is mandatory");
+			validationResult.addError("password", "Password is mandatory");
 		}
 		
 		if(registerDTO.getConfirmPassword().equals(null) || registerDTO.getConfirmPassword().equals("")) {
-			validationResult.addError("Confirm password is mandatory");
+			validationResult.addError("confirmPassword", "Confirm password is mandatory");
 		} else if(!registerDTO.getConfirmPassword().equals(registerDTO.getPassword())) {
-			validationResult.addError("Invalid confirm password");
+			validationResult.addError("confirmPassword", "Invalid confirm password");
 		}
-		
-		return validationResult;
+
+		if(validationResult.hasErrors()) {
+			throw new ValidationException(validationResult);
+		}
+	}
+
+	public void validateLogin(LoginDTO loginDTO) throws Exception {
+		ValidationResult validationResult = new ValidationResult();
+
+		if(loginDTO.getMobile() == null) {
+			validationResult.addError("mobile", "Mobile is mandatory");
+		} else if(loginDTO.getMobile().length() != 10) {
+			validationResult.addError("mobile", "Invalid mobile");
+		}
+
+		if(loginDTO.getPassword() == null) {
+			validationResult.addError("password", "Password is mandatory");
+		}
+
+		if(validationResult.hasErrors()) {
+			throw new ValidationException(validationResult);
+		}
 	}
 }

@@ -1,19 +1,15 @@
 package com.sms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 @Entity
 public class User {
 	public enum Status {
-		REGISTERED,
+		PENDING_VERIFICATION,
 		ACTIVE,
 		INACTIVE,
 		DELETED
@@ -37,10 +33,20 @@ public class User {
 	
 	@Column
 	private String mobile;
-	
+
+	@JsonIgnore
 	@Column
 	private String password;
-	
+
+	@JsonIgnore
+	@Column
+	private String otp;
+
+	@JsonIgnore
+	@Column
+	private String token;
+
+	@JsonIgnore
 	@OneToMany
 	private Set<Room> rooms;
 	
@@ -49,7 +55,8 @@ public class User {
 	
 	@Column
 	private Role role;
-	
+
+	@Column
 	private Status status;
 
 	public Long getId() {
@@ -82,6 +89,22 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public Set<Room> getRooms() {

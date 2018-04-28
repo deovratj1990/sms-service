@@ -1,9 +1,15 @@
 package com.sms.validation;
 
 public class ValidationMessage {
+	enum Type {
+		INFORMATION,
+		WARNING,
+		ERROR
+	}
+
 	private String text;
 	
-	private ValidationMessageType type;
+	private Type type;
 
 	public String getText() {
 		return text;
@@ -13,11 +19,11 @@ public class ValidationMessage {
 		this.text = text;
 	}
 
-	public ValidationMessageType getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(ValidationMessageType type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 }
