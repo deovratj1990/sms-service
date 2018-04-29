@@ -15,15 +15,6 @@ public class User {
 		DELETED
 	}
 	
-	public enum Role {
-		CHAIRMAN,
-		SECRETARY,
-		TREASURER,
-		MEMBER,
-		TENANT,
-		STAFF
-	}
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -48,13 +39,10 @@ public class User {
 
 	@JsonIgnore
 	@OneToMany
-	private Set<Room> rooms;
+	private Set<Access> accesses;
 	
 	@Column
 	private ZonedDateTime residingFrom;
-	
-	@Column
-	private Role role;
 
 	@Column
 	private Status status;
@@ -107,16 +95,16 @@ public class User {
 		this.token = token;
 	}
 
-	public Set<Room> getRooms() {
-		return rooms;
+	public Set<Access> getAccesses() {
+		return accesses;
 	}
 	
-	public void addRoom(Room room) {
-		rooms.add(room);
+	public void addAccess(Access room) {
+		accesses.add(room);
 	}
 
-	public void setRooms(Set<Room> rooms) {
-		this.rooms = rooms;
+	public void setAccesses(Set<Access> accesses) {
+		this.accesses = accesses;
 	}
 
 	public ZonedDateTime getResidingFrom() {
@@ -125,14 +113,6 @@ public class User {
 
 	public void setResidingFrom(ZonedDateTime residingFrom) {
 		this.residingFrom = residingFrom;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
 	}
 
 	public Status getStatus() {

@@ -5,6 +5,8 @@ public class LoginDTO {
 
     private String password;
 
+    private Long accessId;
+
     private String otp;
 
     public String getMobile() {
@@ -21,6 +23,14 @@ public class LoginDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getAccessId() {
+        return accessId;
+    }
+
+    public void setAccessId(Long accessId) {
+        this.accessId = accessId;
     }
 
     public String getOtp() {
