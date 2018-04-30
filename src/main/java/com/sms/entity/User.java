@@ -30,14 +30,6 @@ public class User {
 	private String password;
 
 	@JsonIgnore
-	@Column
-	private String otp;
-
-	@JsonIgnore
-	@Column
-	private String token;
-
-	@JsonIgnore
 	@OneToMany
 	private Set<Access> accesses;
 	
@@ -77,22 +69,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getOtp() {
-		return otp;
-	}
-
-	public void setOtp(String otp) {
-		this.otp = otp;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public Set<Access> getAccesses() {

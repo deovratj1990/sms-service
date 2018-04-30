@@ -1,25 +1,27 @@
 package com.sms.dto;
 
-import java.util.Map;
+public class ResponseDTO extends MapDTO {
+	public Integer getCode() {
+		return getInteger("code");
+	}
 
-public class ResponseDTO {
-	private String message;
-	
-	private Map<String, ?> data;
+	public void setCode(Integer code) {
+		put("code", code);
+	}
 
 	public String getMessage() {
-		return message;
+		return getString("message");
 	}
 
 	public void setMessage(String message) {
-		this.message = message;
+		put("message", message);
 	}
 
-	public Map<String, ?> getData() {
-		return data;
+	public MapDTO getData() {
+		return getMap("data");
 	}
 
-	public void setData(Map<String, ?> data) {
-		this.data = data;
+	public void setData(MapDTO data) {
+		put("data", data);
 	}
 }

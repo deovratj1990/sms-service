@@ -1,9 +1,16 @@
 package com.sms.validation;
 
+import com.sms.dto.MapDTO;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class ValidationResult {
 	private Map<String, ValidationMessage> messages;
+
+	public ValidationResult() {
+		messages = new HashMap<String, ValidationMessage>();
+	}
 
 	public Map<String, ValidationMessage> getMessages() {
 		return messages;
@@ -54,5 +61,15 @@ public class ValidationResult {
 	
 	public void addError(String target, String text) {
 		addMessage(target, text, ValidationMessage.Type.ERROR);
+	}
+
+	public MapDTO getMap() {
+		MapDTO map = new MapDTO();
+
+		for(Map.Entry<String, ValidationMessage> entry : messages.entrySet()) {
+			map.put(entry.getKey(), entry.getValue());
+		}
+
+		return map;
 	}
 }

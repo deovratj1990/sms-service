@@ -19,4 +19,12 @@ public class MapDTO extends HashMap<String, Object> {
     public Long getLong(String key) {
         return (Long) this.get(key);
     }
+
+    public Integer getInteger(String key) {
+        return (Integer) get(key);
+    }
+
+    public Boolean getBoolean(String key) {
+        return (Boolean) get(key);
+    }
 }

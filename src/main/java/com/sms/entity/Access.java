@@ -26,6 +26,9 @@ public class Access {
     @Column
     private Role role;
 
+    @Column
+    private String otp;
+
     public Long getId() {
         return id;
     }
@@ -56,5 +59,13 @@ public class Access {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

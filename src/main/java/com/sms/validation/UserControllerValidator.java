@@ -40,7 +40,7 @@ public class UserControllerValidator {
 		
 		if(registerDTO.getMobile().equals(null) || registerDTO.getMobile().equals("")) {
 			validationResult.addError("mobile", "Mobile is mandatory");
-		} else if(registerDTO.getMobile().length() == 10) {
+		} else if(registerDTO.getMobile().length() != 10) {
 			validationResult.addError("mobile", "Invalid mobile");
 		}
 		
