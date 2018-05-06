@@ -14,7 +14,7 @@ public class Room {
 	private Long id;
 	
 	@Column
-	private String number;
+	private String name;
 	
 	@ManyToOne
 	private Wing wing;
@@ -27,12 +27,12 @@ public class Room {
 		this.id = id;
 	}
 
-	public String getNumber() {
-		return number;
+	public String getName() {
+		return name;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Wing getWing() {

@@ -21,27 +21,27 @@ public class UserControllerValidator {
 		ValidationResult validationResult = new ValidationResult();
 		
 		if(registerDTO.getSocietyId().equals(null)) {
-			validationResult.addError("societyId", "Society is mandatory");
+			validationResult.addError("societyId", "Society is mandatory.");
 		}
 		
 		if(registerDTO.getRoomId().equals(null)) {
-			validationResult.addError("roomId", "Room is mandatory");
+			validationResult.addError("roomId", "Room is mandatory.");
 		} else {
 			Room room = roomRepository.getOne(registerDTO.getRoomId());
 			
 			if(room != null) {
 				if(!room.getWing().getSociety().getId().equals(registerDTO.getSocietyId())) {
-					validationResult.addError("roomId", "Invalid society");
+					validationResult.addError("roomId", "Society must be valid.");
 				}
 			} else {
-				validationResult.addError("roomId", "Invalid room");
+				validationResult.addError("roomId", "Room must be valid.");
 			}
 		}
 		
 		if(registerDTO.getMobile().equals(null) || registerDTO.getMobile().equals("")) {
-			validationResult.addError("mobile", "Mobile is mandatory");
+			validationResult.addError("mobile", "Mobile is mandatory.");
 		} else if(registerDTO.getMobile().length() != 10) {
-			validationResult.addError("mobile", "Invalid mobile");
+			validationResult.addError("mobile", "Mobile must be valid.");
 		}
 		
 		if(registerDTO.getPassword().equals(null) || registerDTO.getPassword().equals("")) {
@@ -49,13 +49,13 @@ public class UserControllerValidator {
 		}
 		
 		if(registerDTO.getConfirmPassword().equals(null) || registerDTO.getConfirmPassword().equals("")) {
-			validationResult.addError("confirmPassword", "Confirm password is mandatory");
+			validationResult.addError("confirmPassword", "Confirm password is mandatory.");
 		} else if(!registerDTO.getConfirmPassword().equals(registerDTO.getPassword())) {
-			validationResult.addError("confirmPassword", "Invalid confirm password");
+			validationResult.addError("confirmPassword", "Confirm password must match Password.");
 		}
 
 		if(validationResult.hasErrors()) {
-			throw new ValidationException(validationResult);
+			throw new ValidationException("Bad Input.", validationResult);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class UserControllerValidator {
 		}
 
 		if(validationResult.hasErrors()) {
-			throw new ValidationException(validationResult);
+			throw new ValidationException("Bad Input.", validationResult);
 		}
 	}
 }

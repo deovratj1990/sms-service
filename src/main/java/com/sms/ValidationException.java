@@ -5,8 +5,8 @@ import com.sms.validation.ValidationResult;
 public class ValidationException extends Exception {
     private ValidationResult validationResult;
 
-    public ValidationException(ValidationResult validationResult) {
-        super("Validation exception");
+    public ValidationException(String message, ValidationResult validationResult) {
+        super(message);
 
         this.validationResult = validationResult;
     }

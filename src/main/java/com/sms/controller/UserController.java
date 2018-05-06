@@ -31,13 +31,17 @@ public class UserController {
 
 			responseDTO.setCode(HttpStatus.CREATED.value());
 
-			responseDTO.setMessage("User registered successfully. Kindly collect login otp from secretary");
+			responseDTO.setMessage("Registration successful. Please collect otp from your Society Secretary and Login.");
 		} catch(ValidationException ex) {
 			responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
 
 			responseDTO.setMessage(ex.getMessage());
 
-			responseDTO.setData(ex.getValidationResult().getMap());
+			MapDTO map = new MapDTO();
+
+			map.put("validationError", ex.getValidationResult().getMap());
+
+			responseDTO.setData(map);
 		} catch(DuplicateEntityException ex) {
 			responseDTO.setCode(HttpStatus.CONFLICT.value());
 

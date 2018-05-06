@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
 			return user;
 		} else {
-			throw new DuplicateEntityException("User already registered. Kindly collect otp from Secretary and Login.");
+			throw new DuplicateEntityException("Registration already done. Please collect otp from your Society Secretary and Login.");
 		}
 	}
 
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
                             MapDTO roomMap = new MapDTO();
 
                             roomMap.put("accessId", access.getId());
-                            roomMap.put("address", room.getNumber() + ", " + room.getWing().getName() + ", " + room.getWing().getSociety().getName());
+                            roomMap.put("address", room.getName() + ", " + room.getWing().getName() + ", " + room.getWing().getSociety().getName());
 
                             map.getList("rooms").add(roomMap);
                         }
