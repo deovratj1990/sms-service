@@ -2,9 +2,7 @@ package com.sms.accounting.entity;
 
 import com.sms.user.entity.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -15,6 +13,7 @@ public class CostHeader {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
@@ -26,7 +25,7 @@ public class CostHeader {
     @Column
     private ZonedDateTime createdOn;
 
-    @Column
+    @OneToOne
     private User createdBy;
 
     public Long getId() {

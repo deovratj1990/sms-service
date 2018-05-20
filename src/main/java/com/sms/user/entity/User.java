@@ -1,9 +1,11 @@
 package com.sms.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sms.common.converter.ZonedDateTimeConverter;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -38,6 +40,14 @@ public class User {
 
 	@Column
 	private Status status;
+
+	@Column
+	@Convert(converter = ZonedDateTimeConverter.class)
+	private ZonedDateTime createdOn;
+
+	public User() {
+		accesses = new HashSet<Access>();
+	}
 
 	public Long getId() {
 		return id;
@@ -97,5 +107,13 @@ public class User {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public ZonedDateTime getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(ZonedDateTime createdOn) {
+		this.createdOn = createdOn;
 	}
 }

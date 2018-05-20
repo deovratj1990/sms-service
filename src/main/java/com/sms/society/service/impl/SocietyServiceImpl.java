@@ -11,7 +11,7 @@ import com.sms.society.repository.RoomRepository;
 import com.sms.society.repository.SocietyRepository;
 import com.sms.society.repository.WingRepository;
 import com.sms.society.service.SocietyService;
-import com.sms.society.validation.SocietyControllerValidator;
+import com.sms.society.validation.SocietyServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class SocietyServiceImpl implements SocietyService {
     @Autowired
-    private SocietyControllerValidator validator;
+    private SocietyServiceValidator validator;
 
     @Autowired
     private LocalityRepository localityRepository;

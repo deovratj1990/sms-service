@@ -13,7 +13,7 @@ import com.sms.user.repository.AccessRepository;
 import com.sms.society.repository.RoomRepository;
 import com.sms.user.repository.UserRepository;
 import com.sms.user.service.UserService;
-import com.sms.society.validation.UserControllerValidator;
+import com.sms.user.validation.UserServiceValidator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 	private String jwtSecret;
 
 	@Autowired
-	private UserControllerValidator validator;
+	private UserServiceValidator validator;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public MapDTO login(LoginDTO loginDTO) throws Exception {
-		UserControllerValidator validator = new UserControllerValidator();
+		UserServiceValidator validator = new UserServiceValidator();
 
 		validator.validateLogin(loginDTO);
 

@@ -1,12 +1,12 @@
 package com.sms.society.validation;
 
-import com.sms.common.ValidationException;
+import com.sms.common.validation.ValidationException;
 import com.sms.society.controller.dto.society.RegisterDTO;
 import com.sms.common.validation.ValidationResult;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SocietyControllerValidator {
+public class SocietyServiceValidator {
     public void validateRegister(RegisterDTO registerDTO) throws ValidationException {
         ValidationResult validationResult = new ValidationResult();
 

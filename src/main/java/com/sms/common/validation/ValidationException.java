@@ -1,4 +1,4 @@
-package com.sms.common;
+package com.sms.common.validation;
 
 import com.sms.common.validation.ValidationResult;
 

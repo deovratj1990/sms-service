@@ -1,6 +1,6 @@
-package com.sms.society.validation;
+package com.sms.user.validation;
 
-import com.sms.common.ValidationException;
+import com.sms.common.validation.ValidationException;
 import com.sms.user.controller.dto.user.LoginDTO;
 import com.sms.user.controller.dto.user.RegisterDTO;
 import com.sms.society.entity.Room;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserControllerValidator {
+public class UserServiceValidator {
 	@Autowired
 	private SocietyRepository societyRepository;
 	

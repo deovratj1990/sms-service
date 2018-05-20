@@ -3,7 +3,7 @@ package com.sms.user.controller;
 import com.sms.common.DuplicateEntityException;
 import com.sms.common.EntityNotFoundException;
 import com.sms.common.InvalidEntityException;
-import com.sms.common.ValidationException;
+import com.sms.common.validation.ValidationException;
 import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
 import com.sms.user.controller.dto.user.LoginDTO;
