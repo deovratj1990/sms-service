@@ -16,13 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/society")
+@RequestMapping(path = "/user")
 @CrossOrigin(origins = "*")
 public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(path = "/register", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/register", method = RequestMethod.POST)
 	public ResponseEntity<ResponseDTO> registerUser(@RequestBody RegisterDTO registerDTO) {
 		ResponseDTO responseDTO = new ResponseDTO();
 

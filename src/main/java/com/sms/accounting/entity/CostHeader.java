@@ -19,7 +19,7 @@ public class CostHeader {
     @Column
     private String name;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column

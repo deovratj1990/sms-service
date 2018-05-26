@@ -4,16 +4,48 @@ import java.util.Set;
 
 public class SaveDTO {
     public class Particular {
-        private String name;
+        public class CostHeader {
+            private Long id;
+
+            private String name;
+
+            public Long getId() {
+                return id;
+            }
+
+            public void setId(Long id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+        }
+
+        private Long id;
+
+        private CostHeader costHeader;
 
         private Double amount;
 
-        public String getName() {
-            return name;
+        public Long getId() {
+            return id;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public CostHeader getCostHeader() {
+            return costHeader;
+        }
+
+        public void setCostHeader(CostHeader costHeader) {
+            this.costHeader = costHeader;
         }
 
         public Double getAmount() {
@@ -27,9 +59,9 @@ public class SaveDTO {
 
     private Long costHeaderId;
 
-    private String transactionType;
+    private String transactionFrom;
 
-    private String applicableTo;
+    private String transactionTo;
 
     private String interval;
 
@@ -49,20 +81,20 @@ public class SaveDTO {
         this.costHeaderId = costHeaderId;
     }
 
-    public String getTransactionType() {
-        return transactionType;
+    public String getTransactionFrom() {
+        return transactionFrom;
     }
 
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
+    public void setTransactionFrom(String transactionFrom) {
+        this.transactionFrom = transactionFrom;
     }
 
-    public String getApplicableTo() {
-        return applicableTo;
+    public String getTransactionTo() {
+        return transactionTo;
     }
 
-    public void setApplicableTo(String applicableTo) {
-        this.applicableTo = applicableTo;
+    public void setTransactionTo(String transactionTo) {
+        this.transactionTo = transactionTo;
     }
 
     public String getInterval() {

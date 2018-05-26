@@ -10,12 +10,7 @@ import java.util.Set;
 
 @Entity
 public class TransactionDefinition {
-    public enum TransactionType {
-        CREDIT,
-        DEBIT
-    }
-
-    public enum ApplicableTo {
+    public enum AccountType {
         SOCIETY,
         MEMBER,
         VENDOR,
@@ -43,11 +38,11 @@ public class TransactionDefinition {
     @OneToOne
     private CostHeader costHeader;
 
-    @Column
-    private TransactionType transactionType;
+    @Enumerated(EnumType.STRING)
+    private AccountType transactionFrom;
 
-    @Column
-    private ApplicableTo applicableTo;
+    @Enumerated(EnumType.STRING)
+    private AccountType transactionTo;
 
     @Column(name = "intervalType")
     private Interval interval;
@@ -59,10 +54,10 @@ public class TransactionDefinition {
     @Column
     private Double amount;
 
-    @OneToMany
+    @OneToMany(mappedBy = "transactionDefinition")
     private Set<Particular> particulars;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column
@@ -92,20 +87,20 @@ public class TransactionDefinition {
         this.costHeader = costHeader;
     }
 
-    public TransactionType getTransactionType() {
-        return transactionType;
+    public AccountType getTransactionFrom() {
+        return transactionFrom;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
+    public void setTransactionFrom(AccountType transactionFrom) {
+        this.transactionFrom = transactionFrom;
     }
 
-    public ApplicableTo getApplicableTo() {
-        return applicableTo;
+    public AccountType getTransactionTo() {
+        return transactionTo;
     }
 
-    public void setApplicableTo(ApplicableTo applicableTo) {
-        this.applicableTo = applicableTo;
+    public void setTransactionTo(AccountType transactionTo) {
+        this.transactionTo = transactionTo;
     }
 
     public Interval getInterval() {

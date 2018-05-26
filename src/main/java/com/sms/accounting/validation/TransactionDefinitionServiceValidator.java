@@ -21,16 +21,16 @@ public class TransactionDefinitionServiceValidator {
             validationResult.addError("costHeaderId", "Cost header ID is mandatory.");
         }
 
-        if(saveDTO.getTransactionType() == null) {
-            validationResult.addError("transactionType", "Transaction type is mandatory.");
-        } else if(Arrays.binarySearch(TransactionDefinition.TransactionType.values(), saveDTO.getTransactionType()) < 0) {
-            validationResult.addError("transactionType", "Transaction type must be valid.");
+        if(saveDTO.getTransactionFrom() == null) {
+            validationResult.addError("transactionFrom", "Transaction from is mandatory.");
+        } else if(Arrays.binarySearch(TransactionDefinition.AccountType.values(), saveDTO.getTransactionFrom()) < 0) {
+            validationResult.addError("transactionFrom", "Transaction from must be valid.");
         }
 
-        if(saveDTO.getApplicableTo() == null) {
-            validationResult.addError("applicableTo", "Applicable to is mandatory.");
-        } else if(Arrays.binarySearch(TransactionDefinition.ApplicableTo.values(), saveDTO.getApplicableTo()) < 0) {
-            validationResult.addError("applicableTo", "Applicable to must be valid.");
+        if(saveDTO.getTransactionTo() == null) {
+            validationResult.addError("transactionTo", "Transaction to is mandatory.");
+        } else if(Arrays.binarySearch(TransactionDefinition.AccountType.values(), saveDTO.getTransactionTo()) < 0) {
+            validationResult.addError("transactionTo", "Transaction to must be valid.");
         }
 
         if(saveDTO.getInterval() == null) {
@@ -54,7 +54,7 @@ public class TransactionDefinitionServiceValidator {
                 boolean particularsValidated = true;
 
                 for(SaveDTO.Particular particularDTO : saveDTO.getParticulars()) {
-                    if(particularDTO.getName() == null || particularDTO.equals("")) {
+                    if(particularDTO.getCostHeader().getName() == null || particularDTO.getCostHeader().getName().equals("")) {
                         validationResult.addError("particularName", "Particular name must be valid.");
 
                         particularsValidated = false;

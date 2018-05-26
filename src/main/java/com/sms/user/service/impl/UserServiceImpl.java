@@ -1,8 +1,10 @@
 package com.sms.user.service.impl;
 
+import com.sms.common.DateTimeUtil;
 import com.sms.common.DuplicateEntityException;
 import com.sms.common.EntityNotFoundException;
 import com.sms.common.InvalidEntityException;
+import com.sms.common.converter.ZonedDateTimeConverter;
 import com.sms.common.dto.MapDTO;
 import com.sms.user.controller.dto.user.LoginDTO;
 import com.sms.user.controller.dto.user.RegisterDTO;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
 	@Value("${com.sms.jwt.secret}")
 	private String jwtSecret;
+
+	@Autowired
+	private DateTimeUtil dateTimeUtil;
 
 	@Autowired
 	private UserServiceValidator validator;
@@ -78,15 +84,15 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByMobile(registerDTO.getMobile());
 
 		if (user == null) {
-			Room room = roomRepository.getOne(registerDTO.getRoomId());
+			Room room = roomRepository.findById(registerDTO.getRoomId()).get();
 
 			user = new User();
 
 			user.setName(registerDTO.getName());
 			user.setMobile(registerDTO.getMobile());
 			user.setPassword(registerDTO.getPassword());
-
 			user.setStatus(User.Status.PENDING_VERIFICATION);
+			user.setCreatedOn(dateTimeUtil.getCurrent());
 
 			user = userRepository.save(user);
 

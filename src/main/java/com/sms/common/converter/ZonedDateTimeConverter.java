@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Converter
 public class ZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, String> {
     @Autowired
-    DateTimeFormatter dateTimeFormatter;
+    private DateTimeFormatter dateTimeFormatter;
 
     @Override
     public String convertToDatabaseColumn(ZonedDateTime attribute) {

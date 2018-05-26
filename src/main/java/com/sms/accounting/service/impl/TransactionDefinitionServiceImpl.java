@@ -43,8 +43,8 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
 
         if(costHeader != null) {
             transactionDefinition.setCostHeader(costHeader);
-            transactionDefinition.setTransactionType(TransactionDefinition.TransactionType.valueOf(saveDTO.getTransactionType()));
-            transactionDefinition.setApplicableTo(TransactionDefinition.ApplicableTo.valueOf(saveDTO.getApplicableTo()));
+            transactionDefinition.setTransactionFrom(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionFrom()));
+            transactionDefinition.setTransactionTo(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionTo()));
             transactionDefinition.setInterval(TransactionDefinition.Interval.valueOf(saveDTO.getInterval()));
             transactionDefinition.setFrom(ZonedDateTime.parse(saveDTO.getFrom(), dateTimeFormatter));
 
@@ -54,7 +54,7 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
                 for(SaveDTO.Particular particularDTO : saveDTO.getParticulars()) {
                     Particular particular = new Particular();
 
-                    CostHeader particularCostHeader = costHeaderRepository.findByName(particularDTO.getName());
+                    CostHeader particularCostHeader = costHeaderRepository.findByName(particularDTO.getCostHeader().getName());
 
                     if(particularCostHeader != null) {
                         particular.setCostHeader(particularCostHeader);
@@ -96,8 +96,8 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
 
             if(costHeader != null) {
                 transactionDefinition.setCostHeader(costHeader);
-                transactionDefinition.setTransactionType(TransactionDefinition.TransactionType.valueOf(saveDTO.getTransactionType()));
-                transactionDefinition.setApplicableTo(TransactionDefinition.ApplicableTo.valueOf(saveDTO.getApplicableTo()));
+                transactionDefinition.setTransactionFrom(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionFrom()));
+                transactionDefinition.setTransactionTo(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionTo()));
                 transactionDefinition.setInterval(TransactionDefinition.Interval.valueOf(saveDTO.getInterval()));
                 transactionDefinition.setFrom(ZonedDateTime.parse(saveDTO.getFrom(), dateTimeFormatter));
 
@@ -107,7 +107,7 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
                     for(SaveDTO.Particular particularDTO : saveDTO.getParticulars()) {
                         Particular particular = new Particular();
 
-                        CostHeader particularCostHeader = costHeaderRepository.findByName(particularDTO.getName());
+                        CostHeader particularCostHeader = costHeaderRepository.findByName(particularDTO.getCostHeader().getName());
 
                         if(particularCostHeader != null) {
                             particular.setCostHeader(particularCostHeader);

@@ -30,8 +30,8 @@ public class Society {
 	
 	@Column
 	private Integer roomCount;
-	
-	@Column
+
+	@Enumerated(EnumType.STRING)
 	private Status status;
 	
 	@Column

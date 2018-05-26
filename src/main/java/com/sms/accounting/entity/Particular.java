@@ -14,6 +14,9 @@ public class Particular {
     @Column
     private Double amount;
 
+    @ManyToOne
+    private TransactionDefinition transactionDefinition;
+
     public Long getId() {
         return id;
     }
@@ -36,5 +39,13 @@ public class Particular {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public TransactionDefinition getTransactionDefinition() {
+        return transactionDefinition;
+    }
+
+    public void setTransactionDefinition(TransactionDefinition transactionDefinition) {
+        this.transactionDefinition = transactionDefinition;
     }
 }

@@ -25,7 +25,7 @@ public class Access {
     @ManyToOne
     private Room room;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column

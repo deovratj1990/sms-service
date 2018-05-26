@@ -32,13 +32,14 @@ public class User {
 	private String password;
 
 	@JsonIgnore
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	private Set<Access> accesses;
 	
 	@Column
+	@Convert(converter = ZonedDateTimeConverter.class)
 	private ZonedDateTime residingFrom;
 
-	@Column
+	@Enumerated(EnumType.STRING)
 	private Status status;
 
 	@Column
