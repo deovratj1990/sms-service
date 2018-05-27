@@ -1,5 +1,6 @@
 package com.sms.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sms.society.entity.Room;
 
 import javax.persistence.*;
@@ -15,6 +16,13 @@ public class Access {
         STAFF
     }
 
+    public enum Status {
+        PENDING_VERIFICATION,
+        ACTIVE,
+        INACTIVE,
+        DELETED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,11 +33,15 @@ public class Access {
     @ManyToOne
     private Room room;
 
+    @JsonIgnore
+    @Column
+    private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column
-    private String otp;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public Long getId() {
         return id;
@@ -55,6 +67,14 @@ public class Access {
         this.room = room;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -63,11 +83,11 @@ public class Access {
         this.role = role;
     }
 
-    public String getOtp() {
-        return otp;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setOtp(String otp) {
-        this.otp = otp;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

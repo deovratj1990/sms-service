@@ -5,10 +5,10 @@ import com.sms.accounting.entity.CostHeader;
 import com.sms.accounting.repository.CostHeaderRepository;
 import com.sms.accounting.service.CostHeaderService;
 import com.sms.accounting.validation.CostHeaderServiceValidator;
-import com.sms.common.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.ZonedDateTime;
 
 @Service

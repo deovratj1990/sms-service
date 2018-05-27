@@ -1,12 +1,11 @@
 package com.sms.society.service.impl;
 
-import com.sms.common.EntityNotFoundException;
+import com.sms.address.repository.LocalityRepository;
 import com.sms.common.dto.MapDTO;
 import com.sms.society.controller.dto.society.RegisterDTO;
 import com.sms.society.entity.Room;
 import com.sms.society.entity.Society;
 import com.sms.society.entity.Wing;
-import com.sms.address.repository.LocalityRepository;
 import com.sms.society.repository.RoomRepository;
 import com.sms.society.repository.SocietyRepository;
 import com.sms.society.repository.WingRepository;
@@ -15,6 +14,7 @@ import com.sms.society.validation.SocietyServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;

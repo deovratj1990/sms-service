@@ -1,19 +1,18 @@
 package com.sms.user.controller;
 
-import com.sms.common.DuplicateEntityException;
-import com.sms.common.EntityNotFoundException;
 import com.sms.common.InvalidEntityException;
-import com.sms.common.validation.ValidationException;
 import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
+import com.sms.common.validation.ValidationException;
 import com.sms.user.controller.dto.user.LoginDTO;
 import com.sms.user.controller.dto.user.RegisterDTO;
 import com.sms.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -31,7 +30,7 @@ public class UserController {
 
 			responseDTO.setCode(HttpStatus.CREATED.value());
 
-			responseDTO.setMessage("Registration successful. Please collect otp from your Society Secretary and Login.");
+			responseDTO.setMessage("Registration successful. Please collect Password from your Society Secretary and Login.");
 		} catch(ValidationException ex) {
 			responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
 
@@ -42,8 +41,8 @@ public class UserController {
 			map.put("validationError", ex.getValidationResult().getMap());
 
 			responseDTO.setData(map);
-		} catch(DuplicateEntityException ex) {
-			responseDTO.setCode(HttpStatus.CONFLICT.value());
+		} catch(EntityNotFoundException ex) {
+			responseDTO.setCode(HttpStatus.NOT_FOUND.value());
 
 			responseDTO.setMessage(ex.getMessage());
 		} catch(Exception ex) {
@@ -74,11 +73,11 @@ public class UserController {
 
 			responseDTO.setData(ex.getValidationResult().getMap());
 		} catch(EntityNotFoundException ex) {
-			responseDTO.setCode(HttpStatus.NOT_FOUND.value());
+			responseDTO.setCode(HttpStatus.UNAUTHORIZED.value());
 
 			responseDTO.setMessage(ex.getMessage());
 		} catch(InvalidEntityException ex) {
-			responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
+			responseDTO.setCode(HttpStatus.FORBIDDEN.value());
 
 			responseDTO.setMessage(ex.getMessage());
 		} catch(Exception ex) {

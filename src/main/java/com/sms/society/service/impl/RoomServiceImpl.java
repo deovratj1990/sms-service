@@ -1,6 +1,5 @@
 package com.sms.society.service.impl;
 
-import com.sms.common.EntityNotFoundException;
 import com.sms.common.dto.MapDTO;
 import com.sms.society.entity.Room;
 import com.sms.society.repository.RoomRepository;
@@ -8,6 +7,7 @@ import com.sms.society.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,12 +1,12 @@
 package com.sms.user.validation;
 
 import com.sms.common.validation.ValidationException;
-import com.sms.user.controller.dto.user.LoginDTO;
-import com.sms.user.controller.dto.user.RegisterDTO;
+import com.sms.common.validation.ValidationResult;
 import com.sms.society.entity.Room;
 import com.sms.society.repository.RoomRepository;
 import com.sms.society.repository.SocietyRepository;
-import com.sms.common.validation.ValidationResult;
+import com.sms.user.controller.dto.user.LoginDTO;
+import com.sms.user.controller.dto.user.RegisterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,16 +44,6 @@ public class UserServiceValidator {
 		} else if(registerDTO.getMobile().length() != 10) {
 			validationResult.addError("mobile", "Mobile must be valid.");
 		}
-		
-		if(registerDTO.getPassword().equals(null) || registerDTO.getPassword().equals("")) {
-			validationResult.addError("password", "Password is mandatory");
-		}
-		
-		if(registerDTO.getConfirmPassword().equals(null) || registerDTO.getConfirmPassword().equals("")) {
-			validationResult.addError("confirmPassword", "Confirm password is mandatory.");
-		} else if(!registerDTO.getConfirmPassword().equals(registerDTO.getPassword())) {
-			validationResult.addError("confirmPassword", "Confirm password must match Password.");
-		}
 
 		if(validationResult.hasErrors()) {
 			throw new ValidationException("Bad Input.", validationResult);
@@ -63,14 +53,24 @@ public class UserServiceValidator {
 	public void validateLogin(LoginDTO loginDTO) throws Exception {
 		ValidationResult validationResult = new ValidationResult();
 
-		if(loginDTO.getMobile() == null) {
-			validationResult.addError("mobile", "Mobile is mandatory");
-		} else if(loginDTO.getMobile().length() != 10) {
-			validationResult.addError("mobile", "Invalid mobile");
-		}
+		if(loginDTO.getOperation() == null) {
+			validationResult.addError("operation", "Operation is mandatory.");
+		} else if(!loginDTO.getOperation().toUpperCase().matches("ROOM|PASSWORD")) {
+			validationResult.addError("operation", "Invalid operation.");
+		} else {
+			if(loginDTO.getMobile() == null) {
+				validationResult.addError("mobile", "Mobile is mandatory.");
+			} else if(loginDTO.getMobile().length() != 10) {
+				validationResult.addError("mobile", "Invalid mobile.");
+			}
 
-		if(loginDTO.getPassword() == null) {
-			validationResult.addError("password", "Password is mandatory");
+			if(loginDTO.getOperation().toUpperCase().equals("PASSWORD") && loginDTO.getPassword() == null) {
+				validationResult.addError("password", "Password is mandatory.");
+			}
+
+			if(loginDTO.getOperation().toUpperCase().equals("PASSWORD") && loginDTO.getAccessId() == null) {
+				validationResult.addError("accessId", "Access is mandatory.");
+			}
 		}
 
 		if(validationResult.hasErrors()) {

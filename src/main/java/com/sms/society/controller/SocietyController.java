@@ -1,6 +1,5 @@
 package com.sms.society.controller;
 
-import com.sms.common.EntityNotFoundException;
 import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
 import com.sms.society.controller.dto.society.RegisterDTO;
@@ -10,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+
 @RestController
 @RequestMapping(path = "/society")
 @CrossOrigin(origins = "*")
@@ -17,8 +18,8 @@ public class SocietyController {
     @Autowired
     private SocietyService societyService;
 
-    @RequestMapping(path = "/get", method = RequestMethod.GET)
-    public ResponseEntity<ResponseDTO> getSocieties(@RequestParam(name = "society", required = false) Long societyId, @RequestParam(name = "locality", required = false) Long localityId, @RequestParam(name = "pincode", required = false) Long pincodeId, @RequestParam(name = "area", required = false) Long areaId, @RequestParam(name = "city", required = false) Long cityId, @RequestParam(name = "state", required = false) Long stateId, @RequestParam(name = "country", required = false) Long countryId) {
+    @RequestMapping(path = "/getAll", method = RequestMethod.GET)
+    public ResponseEntity<ResponseDTO> getAllSocieties(@RequestParam(name = "society", required = false) Long societyId, @RequestParam(name = "locality", required = false) Long localityId, @RequestParam(name = "pincode", required = false) Long pincodeId, @RequestParam(name = "area", required = false) Long areaId, @RequestParam(name = "city", required = false) Long cityId, @RequestParam(name = "state", required = false) Long stateId, @RequestParam(name = "country", required = false) Long countryId) {
         ResponseDTO responseDTO = new ResponseDTO();
 
         try {
@@ -51,7 +52,7 @@ public class SocietyController {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/rgister", method = RequestMethod.POST)
+    @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<ResponseDTO> registerSociety(@RequestBody RegisterDTO registerDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
 

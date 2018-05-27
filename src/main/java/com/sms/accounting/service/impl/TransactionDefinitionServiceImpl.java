@@ -9,10 +9,10 @@ import com.sms.accounting.repository.ParticularRepository;
 import com.sms.accounting.repository.TransactionDefinitionRepository;
 import com.sms.accounting.service.TransactionDefinitionService;
 import com.sms.accounting.validation.TransactionDefinitionServiceValidator;
-import com.sms.common.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 

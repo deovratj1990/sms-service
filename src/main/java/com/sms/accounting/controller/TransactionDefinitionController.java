@@ -2,13 +2,14 @@ package com.sms.accounting.controller;
 
 import com.sms.accounting.controller.dto.transactiondefinition.SaveDTO;
 import com.sms.accounting.service.TransactionDefinitionService;
-import com.sms.common.EntityNotFoundException;
 import com.sms.common.dto.ResponseDTO;
 import com.sms.common.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/accounting/transactiondef")

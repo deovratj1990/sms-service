@@ -1,18 +1,15 @@
 package com.sms.user.service.impl;
 
 import com.sms.common.DateTimeUtil;
-import com.sms.common.DuplicateEntityException;
-import com.sms.common.EntityNotFoundException;
 import com.sms.common.InvalidEntityException;
-import com.sms.common.converter.ZonedDateTimeConverter;
 import com.sms.common.dto.MapDTO;
+import com.sms.society.entity.Room;
+import com.sms.society.repository.RoomRepository;
 import com.sms.user.controller.dto.user.LoginDTO;
 import com.sms.user.controller.dto.user.RegisterDTO;
 import com.sms.user.entity.Access;
-import com.sms.society.entity.Room;
 import com.sms.user.entity.User;
 import com.sms.user.repository.AccessRepository;
-import com.sms.society.repository.RoomRepository;
 import com.sms.user.repository.UserRepository;
 import com.sms.user.service.UserService;
 import com.sms.user.validation.UserServiceValidator;
@@ -23,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -81,33 +78,34 @@ public class UserServiceImpl implements UserService {
 	public User register(RegisterDTO registerDTO) throws Exception {
 		validator.validateRegister(registerDTO);
 
-		User user = userRepository.findByMobile(registerDTO.getMobile());
+		Room room = roomRepository.findById(registerDTO.getRoomId()).get();
 
-		if (user == null) {
-			Room room = roomRepository.findById(registerDTO.getRoomId()).get();
+		if(room != null) {
+			User user = userRepository.findByMobile(registerDTO.getMobile());
 
-			user = new User();
+			if (user == null) {
+				user = new User();
 
-			user.setName(registerDTO.getName());
-			user.setMobile(registerDTO.getMobile());
-			user.setPassword(registerDTO.getPassword());
-			user.setStatus(User.Status.PENDING_VERIFICATION);
-			user.setCreatedOn(dateTimeUtil.getCurrent());
+				user.setName(registerDTO.getName());
+				user.setMobile(registerDTO.getMobile());
+				user.setCreatedOn(dateTimeUtil.getCurrent());
 
-			user = userRepository.save(user);
+				user = userRepository.save(user);
+			}
 
 			Access access = new Access();
 
 			access.setUser(user);
 			access.setRoom(room);
+			access.setPassword(generateOTP());
 			access.setRole(Access.Role.MEMBER);
-			access.setOtp(generateOTP());
+			access.setStatus(Access.Status.PENDING_VERIFICATION);
 
 			accessRepository.save(access);
 
 			return user;
 		} else {
-			throw new DuplicateEntityException("Registration already done. Please collect otp from your Society Secretary and Login.");
+			throw new EntityNotFoundException("Room not found.");
 		}
 	}
 
@@ -117,95 +115,79 @@ public class UserServiceImpl implements UserService {
 
 		validator.validateLogin(loginDTO);
 
-		User user;
-
-		if(loginDTO.getAccessId() == null && loginDTO.getOtp() == null) {
-			user = userRepository.findByMobileAndPassword(loginDTO.getMobile(), loginDTO.getPassword());
+		if(loginDTO.getOperation().toUpperCase().equals("ROOM")) {
+			User user = userRepository.findByMobile(loginDTO.getMobile());
 
 			if(user != null) {
-				if(user.getStatus() == User.Status.ACTIVE) {
-					MapDTO map = new MapDTO();
+				MapDTO map = new MapDTO();
 
-					if(user.getAccesses().size() > 1) {
-                        map.put("rooms", new ArrayList<MapDTO>());
+				map.put("rooms", new ArrayList<MapDTO>());
 
-                        for(Access access : user.getAccesses()) {
-                            Room room = access.getRoom();
+				for(Access access : user.getAccesses()) {
+					Room room = access.getRoom();
 
-                            MapDTO roomMap = new MapDTO();
+					MapDTO roomMap = new MapDTO();
 
-                            roomMap.put("accessId", access.getId());
-                            roomMap.put("address", room.getName() + ", " + room.getWing().getName() + ", " + room.getWing().getSociety().getName());
+					roomMap.put("accessId", access.getId());
+					roomMap.put("address", room.getName() + ", " + room.getWing().getName() + ", " + room.getWing().getSociety().getName());
+					roomMap.put("status", access.getStatus().name());
 
-                            map.getList("rooms").add(roomMap);
-                        }
+					if(access.getStatus() == Access.Status.ACTIVE) {
+						roomMap.put("statusText", "User is active.");
+					} else if(access.getStatus() == Access.Status.PENDING_VERIFICATION) {
+						roomMap.put("statusText", "User verification pending.");
+					} else if(access.getStatus() == Access.Status.INACTIVE) {
+						roomMap.put("statusText", "User is not active.");
+					} else if(access.getStatus() == Access.Status.DELETED) {
+						roomMap.put("statusText", "User is deleted.");
+					} else {
+						roomMap.put("statusText", "Invalid user status.");
+					}
 
-                        map.put("status", "MULTIPLE_ROOMS");
-                    } else {
-					    map.put("status", "TOKEN");
-                        map.put("token", generateToken(user, user.getAccesses().iterator().next()));
-                    }
-
-					return map;
-				} else if(user.getStatus() == User.Status.PENDING_VERIFICATION) {
-					throw new InvalidEntityException("User verification pending");
-				} else if(user.getStatus() == User.Status.INACTIVE) {
-					throw new InvalidEntityException("User is not active");
-				} else if(user.getStatus() == User.Status.DELETED) {
-					throw new InvalidEntityException("User is deleted");
-				} else {
-					throw new InvalidEntityException("Invalid society state");
+					map.getList("rooms").add(roomMap);
 				}
+
+				return map;
 			} else {
-				throw new EntityNotFoundException("Invalid mobile and password");
+				throw new EntityNotFoundException("Invalid mobile.");
 			}
-		} else if(loginDTO.getOtp() == null) {
-			Access access = accessRepository.getOne(loginDTO.getAccessId());
+		} else {
+			Access access = accessRepository.findByIdAndPassword(loginDTO.getAccessId(), loginDTO.getPassword());
 
 			if(access != null) {
-				user = userRepository.findByMobileAndPasswordAndAccess(loginDTO.getMobile(), loginDTO.getPassword(), loginDTO.getAccessId());
+				User user = access.getUser();
 
-				if(user != null) {
-					if(user.getStatus() == User.Status.ACTIVE) {
-						MapDTO map = new MapDTO();
+				if(user.getMobile().equals(loginDTO.getMobile())) {
+					MapDTO map = new MapDTO();
 
-						map.put("status", "token");
-						map.put("token", generateToken(user, access));
+					if(access.getStatus() == Access.Status.PENDING_VERIFICATION) {
+						access.setStatus(Access.Status.ACTIVE);
 
-						return map;
-					} else if(user.getStatus() == User.Status.PENDING_VERIFICATION) {
-						throw new InvalidEntityException("User verification pending");
-					} else if(user.getStatus() == User.Status.INACTIVE) {
-						throw new InvalidEntityException("User is not active");
-					} else if(user.getStatus() == User.Status.DELETED) {
-						throw new InvalidEntityException("User is deleted");
-					} else {
-						throw new InvalidEntityException("Invalid society state");
+						access = accessRepository.save(access);
 					}
+
+					map.put("status", access.getStatus().name());
+
+					if(access.getStatus() == Access.Status.ACTIVE) {
+						map.put("statusText", "User is active.");
+						map.put("token", generateToken(user, user.getAccesses().iterator().next()));
+					} else if(access.getStatus() == Access.Status.INACTIVE) {
+						map.put("statusText", "User is not active.");
+						map.put("token", null);
+					} else if(access.getStatus() == Access.Status.DELETED) {
+						map.put("statusText", "User is deleted.");
+						map.put("token", null);
+					} else {
+						map.put("statusText", "Invalid user status.");
+						map.put("token", null);
+					}
+
+					return map;
 				} else {
-					throw new EntityNotFoundException("Invalid mobile and password and access");
+					throw new InvalidEntityException("Invalid mobile and room.");
 				}
-			} else {
-				throw new InvalidEntityException("Invalid access");
-			}
-        } else {
-			user = userRepository.findByMobileAndPasswordAndAccessAndOtp(loginDTO.getMobile(), loginDTO.getPassword(), loginDTO.getAccessId(), loginDTO.getOtp());
-
-			if(user != null) {
-                if(user.getStatus() == User.Status.PENDING_VERIFICATION) {
-                    user.setStatus(User.Status.ACTIVE);
-
-                    user = userRepository.save(user);
-                }
-
-                MapDTO map = new MapDTO();
-
-				map.put("status", "TOKEN");
-				map.put("token", generateToken(user, user.getAccesses().iterator().next()));
-
-                return map;
             } else {
-			    throw new EntityNotFoundException("Invalid mobile and password and access and otp");
+			    throw new EntityNotFoundException("Incorrect password.");
             }
 		}
 	}

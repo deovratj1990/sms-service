@@ -1,14 +1,15 @@
 package com.sms.society.controller;
 
-import com.sms.common.EntityNotFoundException;
-import com.sms.common.validation.ValidationException;
 import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
+import com.sms.common.validation.ValidationException;
 import com.sms.society.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping(path = "/room")
