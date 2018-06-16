@@ -1,4 +1,4 @@
-package com.sms.society.controller.dto.society;
+package com.sms.society.dto.society;
 
 import java.util.List;
 

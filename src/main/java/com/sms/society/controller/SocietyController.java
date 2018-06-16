@@ -2,7 +2,7 @@ package com.sms.society.controller;
 
 import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
-import com.sms.society.controller.dto.society.RegisterDTO;
+import com.sms.society.dto.society.RegisterDTO;
 import com.sms.society.service.SocietyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

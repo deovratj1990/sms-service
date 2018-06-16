@@ -1,6 +1,6 @@
 package com.sms.accounting.validation;
 
-import com.sms.accounting.controller.dto.costheader.SaveDTO;
+import com.sms.accounting.dto.costheader.SaveDTO;
 import com.sms.common.validation.ValidationException;
 import com.sms.common.validation.ValidationResult;
 import org.springframework.stereotype.Component;

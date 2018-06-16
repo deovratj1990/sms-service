@@ -5,8 +5,8 @@ import com.sms.common.validation.ValidationResult;
 import com.sms.society.entity.Room;
 import com.sms.society.repository.RoomRepository;
 import com.sms.society.repository.SocietyRepository;
-import com.sms.user.controller.dto.user.LoginDTO;
-import com.sms.user.controller.dto.user.RegisterDTO;
+import com.sms.user.dto.user.LoginDTO;
+import com.sms.user.dto.user.RegisterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

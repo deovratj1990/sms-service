@@ -1,6 +1,15 @@
 package com.sms.accounting.service.impl;
 
-import com.sms.accounting.controller.dto.transactiondefinition.SaveDTO;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sms.accounting.dto.transactiondefinition.SaveDTO;
+import com.sms.accounting.entity.Account;
 import com.sms.accounting.entity.CostHeader;
 import com.sms.accounting.entity.Particular;
 import com.sms.accounting.entity.TransactionDefinition;
@@ -9,12 +18,6 @@ import com.sms.accounting.repository.ParticularRepository;
 import com.sms.accounting.repository.TransactionDefinitionRepository;
 import com.sms.accounting.service.TransactionDefinitionService;
 import com.sms.accounting.validation.TransactionDefinitionServiceValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class TransactionDefinitionServiceImpl implements TransactionDefinitionService {
@@ -43,8 +46,8 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
 
         if(costHeader != null) {
             transactionDefinition.setCostHeader(costHeader);
-            transactionDefinition.setTransactionFrom(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionFrom()));
-            transactionDefinition.setTransactionTo(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionTo()));
+            transactionDefinition.setTransactionFrom(Account.Type.valueOf(saveDTO.getTransactionFrom()));
+            transactionDefinition.setTransactionTo(Account.Type.valueOf(saveDTO.getTransactionTo()));
             transactionDefinition.setInterval(TransactionDefinition.Interval.valueOf(saveDTO.getInterval()));
             transactionDefinition.setFrom(ZonedDateTime.parse(saveDTO.getFrom(), dateTimeFormatter));
 
@@ -96,8 +99,8 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
 
             if(costHeader != null) {
                 transactionDefinition.setCostHeader(costHeader);
-                transactionDefinition.setTransactionFrom(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionFrom()));
-                transactionDefinition.setTransactionTo(TransactionDefinition.AccountType.valueOf(saveDTO.getTransactionTo()));
+                transactionDefinition.setTransactionFrom(Account.Type.valueOf(saveDTO.getTransactionFrom()));
+                transactionDefinition.setTransactionTo(Account.Type.valueOf(saveDTO.getTransactionTo()));
                 transactionDefinition.setInterval(TransactionDefinition.Interval.valueOf(saveDTO.getInterval()));
                 transactionDefinition.setFrom(ZonedDateTime.parse(saveDTO.getFrom(), dateTimeFormatter));
 

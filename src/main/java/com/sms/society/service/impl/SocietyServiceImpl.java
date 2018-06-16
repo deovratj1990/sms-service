@@ -2,7 +2,7 @@ package com.sms.society.service.impl;
 
 import com.sms.address.repository.LocalityRepository;
 import com.sms.common.dto.MapDTO;
-import com.sms.society.controller.dto.society.RegisterDTO;
+import com.sms.society.dto.society.RegisterDTO;
 import com.sms.society.entity.Room;
 import com.sms.society.entity.Society;
 import com.sms.society.entity.Wing;

@@ -1,7 +1,7 @@
 package com.sms.society.service;
 
 import com.sms.common.dto.MapDTO;
-import com.sms.society.controller.dto.society.RegisterDTO;
+import com.sms.society.dto.society.RegisterDTO;
 
 import java.util.List;
 

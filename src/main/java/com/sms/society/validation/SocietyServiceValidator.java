@@ -1,7 +1,7 @@
 package com.sms.society.validation;
 
 import com.sms.common.validation.ValidationException;
-import com.sms.society.controller.dto.society.RegisterDTO;
+import com.sms.society.dto.society.RegisterDTO;
 import com.sms.common.validation.ValidationResult;
 import org.springframework.stereotype.Component;
 

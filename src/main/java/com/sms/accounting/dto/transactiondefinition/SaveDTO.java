@@ -1,4 +1,4 @@
-package com.sms.accounting.controller.dto.transactiondefinition;
+package com.sms.accounting.dto.transactiondefinition;
 
 import java.util.Set;
 

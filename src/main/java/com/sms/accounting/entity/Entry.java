@@ -1,4 +1,4 @@
-package com.sms.user.entity;
+package com.sms.accounting.entity;
 
 import java.time.ZonedDateTime;
 
@@ -10,32 +10,38 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sms.common.converter.ZonedDateTimeConverter;
 
 @Entity
-public class User {
-	public enum Status {
-		ACTIVE,
-		INACTIVE,
-		DELETED
+public class Entry {
+	public enum Type {
+		CREDIT,
+		DEBIT
+	}
+	
+	public enum Operation {
+		NEW,
+		REVERSE
 	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column
-	private String mobile;
-
-	@JsonIgnore
-	@Column
-	private String password;
-
+	@ManyToOne
+	private Transaction transaction;
+	
+	@ManyToOne
+	private Account account;
+	
 	@Enumerated(EnumType.STRING)
-	private Status status;
-
+	private Type type;
+	
+	@Enumerated(EnumType.STRING)
+	private Operation operation;
+	
 	@Column
 	@Convert(converter = ZonedDateTimeConverter.class)
 	private ZonedDateTime createdOn;
@@ -48,28 +54,36 @@ public class User {
 		this.id = id;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public Transaction getTransaction() {
+		return transaction;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
-	public String getPassword() {
-		return password;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
-	public Status getStatus() {
-		return status;
+	public Type getType() {
+		return type;
 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public Operation getOperation() {
+		return operation;
+	}
+
+	public void setOperation(Operation operation) {
+		this.operation = operation;
 	}
 
 	public ZonedDateTime getCreatedOn() {

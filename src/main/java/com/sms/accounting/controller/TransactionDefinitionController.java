@@ -1,6 +1,6 @@
 package com.sms.accounting.controller;
 
-import com.sms.accounting.controller.dto.transactiondefinition.SaveDTO;
+import com.sms.accounting.dto.transactiondefinition.SaveDTO;
 import com.sms.accounting.service.TransactionDefinitionService;
 import com.sms.common.dto.ResponseDTO;
 import com.sms.common.validation.ValidationException;

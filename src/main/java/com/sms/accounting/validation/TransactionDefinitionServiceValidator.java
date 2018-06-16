@@ -1,13 +1,15 @@
 package com.sms.accounting.validation;
 
-import com.sms.accounting.controller.dto.transactiondefinition.SaveDTO;
-import com.sms.accounting.entity.TransactionDefinition;
-import com.sms.common.validation.ValidationException;
-import com.sms.common.validation.ValidationResult;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import com.sms.accounting.dto.transactiondefinition.SaveDTO;
+import com.sms.accounting.entity.Account;
+import com.sms.accounting.entity.TransactionDefinition;
+import com.sms.common.validation.ValidationException;
+import com.sms.common.validation.ValidationResult;
 
 @Component
 public class TransactionDefinitionServiceValidator {
@@ -23,13 +25,13 @@ public class TransactionDefinitionServiceValidator {
 
         if(saveDTO.getTransactionFrom() == null) {
             validationResult.addError("transactionFrom", "Transaction from is mandatory.");
-        } else if(Arrays.binarySearch(TransactionDefinition.AccountType.values(), saveDTO.getTransactionFrom()) < 0) {
+        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getTransactionFrom()) < 0) {
             validationResult.addError("transactionFrom", "Transaction from must be valid.");
         }
 
         if(saveDTO.getTransactionTo() == null) {
             validationResult.addError("transactionTo", "Transaction to is mandatory.");
-        } else if(Arrays.binarySearch(TransactionDefinition.AccountType.values(), saveDTO.getTransactionTo()) < 0) {
+        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getTransactionTo()) < 0) {
             validationResult.addError("transactionTo", "Transaction to must be valid.");
         }
 

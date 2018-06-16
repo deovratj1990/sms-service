@@ -1,15 +1,21 @@
 package com.sms.accounting.entity;
 
-import com.sms.user.entity.User;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import javax.persistence.*;
-import java.time.ZonedDateTime;
+import com.sms.society.entity.Society;
 
 @Entity
 public class CostHeader {
     public enum Status {
         ACTIVE,
-        INACTIVE
+        DELETED
     }
 
     @Id
@@ -21,12 +27,9 @@ public class CostHeader {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Column
-    private ZonedDateTime createdOn;
-
-    @OneToOne
-    private User createdBy;
+    
+    @ManyToOne
+    private Society society;
 
     public Long getId() {
         return id;
@@ -52,19 +55,11 @@ public class CostHeader {
         this.status = status;
     }
 
-    public ZonedDateTime getCreatedOn() {
-        return createdOn;
-    }
+	public Society getSociety() {
+		return society;
+	}
 
-    public void setCreatedOn(ZonedDateTime createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
+	public void setSociety(Society society) {
+		this.society = society;
+	}
 }

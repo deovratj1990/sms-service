@@ -1,22 +1,25 @@
 package com.sms.accounting.entity;
 
-import com.sms.common.converter.ZonedDateTimeConverter;
-import com.sms.user.entity.User;
-
-import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import com.sms.common.converter.ZonedDateTimeConverter;
+import com.sms.user.entity.User;
+
 @Entity
 public class TransactionDefinition {
-    public enum AccountType {
-        SOCIETY,
-        MEMBER,
-        VENDOR,
-        CUSTOMER
-    }
-
     public enum Interval {
         ONE_TIME,
         MONTHLY,
@@ -39,23 +42,24 @@ public class TransactionDefinition {
     private CostHeader costHeader;
 
     @Enumerated(EnumType.STRING)
-    private AccountType transactionFrom;
+    private Account.Type transactionFrom;
 
     @Enumerated(EnumType.STRING)
-    private AccountType transactionTo;
+    private Account.Type transactionTo;
 
     @Column(name = "intervalType")
+    @Enumerated(EnumType.STRING)
     private Interval interval;
-
+    
     @Column(name = "fromDate")
     @Convert(converter = ZonedDateTimeConverter.class)
     private ZonedDateTime from;
 
-    @Column
-    private Double amount;
-
     @OneToMany(mappedBy = "transactionDefinition")
     private Set<Particular> particulars;
+    
+    @Column
+    private Double amount;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -87,19 +91,19 @@ public class TransactionDefinition {
         this.costHeader = costHeader;
     }
 
-    public AccountType getTransactionFrom() {
+    public Account.Type getTransactionFrom() {
         return transactionFrom;
     }
 
-    public void setTransactionFrom(AccountType transactionFrom) {
+    public void setTransactionFrom(Account.Type transactionFrom) {
         this.transactionFrom = transactionFrom;
     }
 
-    public AccountType getTransactionTo() {
+    public Account.Type getTransactionTo() {
         return transactionTo;
     }
 
-    public void setTransactionTo(AccountType transactionTo) {
+    public void setTransactionTo(Account.Type transactionTo) {
         this.transactionTo = transactionTo;
     }
 
@@ -110,21 +114,13 @@ public class TransactionDefinition {
     public void setInterval(Interval interval) {
         this.interval = interval;
     }
-
+    
     public ZonedDateTime getFrom() {
         return from;
     }
 
     public void setFrom(ZonedDateTime from) {
         this.from = from;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
     }
 
     public Set<Particular> getParticulars() {
@@ -137,6 +133,14 @@ public class TransactionDefinition {
 
     public void setParticulars(Set<Particular> particulars) {
         this.particulars = particulars;
+    }
+    
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public Status getStatus() {

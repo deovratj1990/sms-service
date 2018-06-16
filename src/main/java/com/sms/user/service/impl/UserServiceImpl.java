@@ -5,8 +5,8 @@ import com.sms.common.InvalidEntityException;
 import com.sms.common.dto.MapDTO;
 import com.sms.society.entity.Room;
 import com.sms.society.repository.RoomRepository;
-import com.sms.user.controller.dto.user.LoginDTO;
-import com.sms.user.controller.dto.user.RegisterDTO;
+import com.sms.user.dto.user.LoginDTO;
+import com.sms.user.dto.user.RegisterDTO;
 import com.sms.user.entity.Access;
 import com.sms.user.entity.User;
 import com.sms.user.repository.AccessRepository;
@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AccessRepository accessRepository;
 
+	@Autowired
+	private ServletRequest servletRequest;
+
 	@Override
 	public String generateOTP() {
 		Random random = new Random();
@@ -71,7 +75,17 @@ public class UserServiceImpl implements UserService {
 		claims.put("accessId", access.getId());
 		claims.put("societyName", access.getRoom().getWing().getSociety().getName());
 
-		return Jwts.builder().signWith(SignatureAlgorithm.HS256, jwtSecret).setClaims(claims).compact();
+		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
+	}
+
+	@Override
+	public User getCurrentUser() {
+		return (User) servletRequest.getAttribute("user");
+	}
+
+	@Override
+	public User getUserById(Long id) {
+		return userRepository.findById(id).get();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.sms.accounting.controller.dto.costheader;
+package com.sms.accounting.dto.costheader;
 
 public class SaveDTO {
     private String name;

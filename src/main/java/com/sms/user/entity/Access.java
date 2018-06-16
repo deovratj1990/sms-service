@@ -1,9 +1,11 @@
 package com.sms.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sms.common.converter.ZonedDateTimeConverter;
 import com.sms.society.entity.Room;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 
 @Entity
 public class Access {
@@ -33,12 +35,12 @@ public class Access {
     @ManyToOne
     private Room room;
 
-    @JsonIgnore
-    @Column
-    private String password;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column
+    @Convert(converter = ZonedDateTimeConverter.class)
+    private ZonedDateTime residingFrom;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -67,20 +69,20 @@ public class Access {
         this.room = room;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public ZonedDateTime getResidingFrom() {
+        return residingFrom;
+    }
+
+    public void setResidingFrom(ZonedDateTime residingFrom) {
+        this.residingFrom = residingFrom;
     }
 
     public Status getStatus() {

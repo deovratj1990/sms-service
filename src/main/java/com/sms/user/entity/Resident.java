@@ -1,21 +1,26 @@
 package com.sms.user.entity;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sms.common.converter.ZonedDateTimeConverter;
+import javax.persistence.OneToOne;
 
 @Entity
-public class User {
+public class Resident {
+	public enum Type {
+		MEMBER,
+		CHAIRMAN,
+		SECRETARY,
+		TRASURER,
+		TENANT
+	}
+	
 	public enum Status {
 		ACTIVE,
 		INACTIVE,
@@ -27,18 +32,19 @@ public class User {
 	private Long id;
 	
 	@Column
-	private String mobile;
-
-	@JsonIgnore
+	private String name;
+	
 	@Column
-	private String password;
-
+	private String mobile;
+	
+	@Column
+	private Date residingFrom;
+	
+	@OneToOne
+	private User user;
+	
 	@Enumerated(EnumType.STRING)
 	private Status status;
-
-	@Column
-	@Convert(converter = ZonedDateTimeConverter.class)
-	private ZonedDateTime createdOn;
 
 	public Long getId() {
 		return id;
@@ -46,6 +52,14 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getMobile() {
@@ -56,12 +70,20 @@ public class User {
 		this.mobile = mobile;
 	}
 
-	public String getPassword() {
-		return password;
+	public Date getResidingFrom() {
+		return residingFrom;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setResidingFrom(Date residingFrom) {
+		this.residingFrom = residingFrom;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Status getStatus() {
@@ -70,13 +92,5 @@ public class User {
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public ZonedDateTime getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(ZonedDateTime createdOn) {
-		this.createdOn = createdOn;
 	}
 }

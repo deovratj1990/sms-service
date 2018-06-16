@@ -1,10 +1,22 @@
 package com.sms.society.entity;
 
-import com.sms.user.entity.Admin;
-import com.sms.address.entity.Locality;
-
-import javax.persistence.*;
 import java.time.ZonedDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.sms.accounting.entity.Account;
+import com.sms.address.entity.Locality;
+import com.sms.common.converter.ZonedDateTimeConverter;
+import com.sms.user.entity.Admin;
 
 @Entity
 public class Society {
@@ -19,22 +31,26 @@ public class Society {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@ManyToOne
-	private Locality locality;
-	
 	@Column
 	private String name;
+	
+	@ManyToOne
+	private Locality locality;
 	
 	@Column
 	private Integer wingCount;
 	
 	@Column
 	private Integer roomCount;
+	
+	@OneToOne
+	private Account account;
 
 	@Enumerated(EnumType.STRING)
 	private Status status;
 	
 	@Column
+	@Convert(converter = ZonedDateTimeConverter.class)
 	private ZonedDateTime createdOn;
 	
 	@OneToOne
@@ -48,20 +64,20 @@ public class Society {
 		this.id = id;
 	}
 
-	public Locality getLocality() {
-		return locality;
-	}
-
-	public void setLocality(Locality locality) {
-		this.locality = locality;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Locality getLocality() {
+		return locality;
+	}
+
+	public void setLocality(Locality locality) {
+		this.locality = locality;
 	}
 
 	public Integer getWingCount() {
@@ -78,6 +94,14 @@ public class Society {
 
 	public void setRoomCount(Integer roomCount) {
 		this.roomCount = roomCount;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public Status getStatus() {

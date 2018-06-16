@@ -1,4 +1,4 @@
-package com.sms.user.controller.dto.user;
+package com.sms.user.dto.user;
 
 public class RegisterDTO {
 	private Long societyId;

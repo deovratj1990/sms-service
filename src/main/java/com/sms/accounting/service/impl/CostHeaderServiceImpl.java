@@ -1,15 +1,15 @@
 package com.sms.accounting.service.impl;
 
-import com.sms.accounting.controller.dto.costheader.SaveDTO;
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sms.accounting.dto.costheader.SaveDTO;
 import com.sms.accounting.entity.CostHeader;
 import com.sms.accounting.repository.CostHeaderRepository;
 import com.sms.accounting.service.CostHeaderService;
 import com.sms.accounting.validation.CostHeaderServiceValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import java.time.ZonedDateTime;
 
 @Service
 public class CostHeaderServiceImpl implements CostHeaderService {
@@ -27,8 +27,6 @@ public class CostHeaderServiceImpl implements CostHeaderService {
 
         costHeader.setName(saveDTO.getName());
         costHeader.setStatus(CostHeader.Status.ACTIVE);
-        costHeader.setCreatedOn(ZonedDateTime.now());
-        costHeader.setCreatedBy(null);
 
         costHeaderRepository.save(costHeader);
     }

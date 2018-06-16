@@ -1,19 +1,17 @@
 package com.sms.user.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.sms.society.entity.Room;
 
 @Entity
-public class Admin {
-	public enum Role {
-		SUPER_ADMIN
-	}
-	
+public class RoomResident {
 	public enum Status {
 		ACTIVE,
 		INACTIVE,
@@ -24,14 +22,14 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column
-	private String mobile;
+	@ManyToOne
+	private Room room;
 	
-	@Column
-	private String password;
-
+	@ManyToOne
+	private Resident resident;
+	
 	@Enumerated(EnumType.STRING)
-	private Role role;
+	private Resident.Type residentType;
 	
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -44,28 +42,28 @@ public class Admin {
 		this.id = id;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public Room getRoom() {
+		return room;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 
-	public String getPassword() {
-		return password;
+	public Resident getResident() {
+		return resident;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setResident(Resident resident) {
+		this.resident = resident;
 	}
 
-	public Role getRole() {
-		return role;
+	public Resident.Type getResidentType() {
+		return residentType;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setResidentType(Resident.Type residentType) {
+		this.residentType = residentType;
 	}
 
 	public Status getStatus() {
