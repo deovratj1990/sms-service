@@ -1,39 +1,38 @@
 package com.sms.user.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sms.accounting.entity.Account;
 import com.sms.common.DateTimeUtil;
-import com.sms.common.InvalidEntityException;
-import com.sms.common.dto.MapDTO;
+import com.sms.common.model.StringKeyMap;
+import com.sms.common.model.Token;
+import com.sms.common.service.SecurityService;
+import com.sms.society.entity.Resident;
 import com.sms.society.entity.Room;
+import com.sms.society.entity.Society;
+import com.sms.society.entity.Staff;
+import com.sms.society.repository.ResidentRepository;
 import com.sms.society.repository.RoomRepository;
+import com.sms.society.repository.StaffRepository;
+import com.sms.society.service.ResidentService;
 import com.sms.user.dto.user.LoginDTO;
 import com.sms.user.dto.user.RegisterDTO;
-import com.sms.user.entity.Access;
 import com.sms.user.entity.User;
-import com.sms.user.repository.AccessRepository;
 import com.sms.user.repository.UserRepository;
 import com.sms.user.service.UserService;
 import com.sms.user.validation.UserServiceValidator;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import javax.servlet.ServletRequest;
-import java.util.ArrayList;
-import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
-	private static final int OTP_LENGTH = 6;
-
-	private static final String OTP_VALUES = "0123456789";
-
-	@Value("${com.sms.jwt.secret}")
-	private String jwtSecret;
-
 	@Autowired
 	private DateTimeUtil dateTimeUtil;
 
@@ -45,43 +44,18 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private RoomRepository roomRepository;
+	
+	@Autowired
+	private ResidentRepository residentRepository;
+	
+	@Autowired
+	private StaffRepository staffRepository;
+	
+	@Autowired
+	private ResidentService residentService;
 
 	@Autowired
-	private AccessRepository accessRepository;
-
-	@Autowired
-	private ServletRequest servletRequest;
-
-	@Override
-	public String generateOTP() {
-		Random random = new Random();
-
-		StringBuilder otp = new StringBuilder();
-
-		for(int index = 0; index < OTP_LENGTH; index++) {
-			int nextCharPosition = random.nextInt(OTP_VALUES.length());
-
-			otp.append(OTP_VALUES.charAt(nextCharPosition));
-		}
-
-		return otp.toString();
-	}
-
-	@Override
-	public String generateToken(User user, Access access) {
-		Claims claims = Jwts.claims().setSubject(user.getId().toString());
-
-		claims.put("userName", user.getName());
-		claims.put("accessId", access.getId());
-		claims.put("societyName", access.getRoom().getWing().getSociety().getName());
-
-		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
-	}
-
-	@Override
-	public User getCurrentUser() {
-		return (User) servletRequest.getAttribute("user");
-	}
+	private SecurityService securityService;
 
 	@Override
 	public User getUserById(Long id) {
@@ -89,120 +63,107 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User register(RegisterDTO registerDTO) throws Exception {
+	public void register(RegisterDTO registerDTO) throws Exception {
 		validator.validateRegister(registerDTO);
+		
+		User user = userRepository.findByMobile(registerDTO.getMobile());
 
-		Room room = roomRepository.findById(registerDTO.getRoomId()).get();
-
-		if(room != null) {
-			User user = userRepository.findByMobile(registerDTO.getMobile());
-
-			if (user == null) {
+		if(user == null) {
+			Room room = roomRepository.getOne(registerDTO.getRoomId());
+			
+			if(room != null) {
+				String passwordHash = securityService.generateHash(registerDTO.getPassword());
+				
 				user = new User();
 
-				user.setName(registerDTO.getName());
 				user.setMobile(registerDTO.getMobile());
+				user.setPassword(passwordHash);
+				user.setStatus(User.Status.ACTIVE);
 				user.setCreatedOn(dateTimeUtil.getCurrent());
 
 				user = userRepository.save(user);
+				
+				if(user != null) {
+					residentService.addMember(room, user);
+				} else {
+					throw new PersistenceException("Error while saving user.");
+				}
+			} else {
+				throw new EntityNotFoundException("Room does not exist.");
 			}
-
-			Access access = new Access();
-
-			access.setUser(user);
-			access.setRoom(room);
-			access.setPassword(generateOTP());
-			access.setRole(Access.Role.MEMBER);
-			access.setStatus(Access.Status.PENDING_VERIFICATION);
-
-			accessRepository.save(access);
-
-			return user;
 		} else {
-			throw new EntityNotFoundException("Room not found.");
+			throw new EntityExistsException("User with same mobile number already exists.");
 		}
 	}
 
 	@Override
-	public MapDTO login(LoginDTO loginDTO) throws Exception {
+	public Set<StringKeyMap> login(LoginDTO loginDTO) throws Exception {
 		UserServiceValidator validator = new UserServiceValidator();
 
 		validator.validateLogin(loginDTO);
+		
+		String passwordHash = securityService.generateHash(loginDTO.getPassword());
+		
+		User user = userRepository.findByMobileAndPassword(loginDTO.getMobile(), passwordHash);
+		
+		if(user != null) {
+			Set<StringKeyMap> options = new HashSet<StringKeyMap>();
+			
+			List<Resident> residents = residentRepository.findByUserId(user.getId());
 
-		if(loginDTO.getOperation().toUpperCase().equals("ROOM")) {
-			User user = userRepository.findByMobile(loginDTO.getMobile());
-
-			if(user != null) {
-				MapDTO map = new MapDTO();
-
-				map.put("rooms", new ArrayList<MapDTO>());
-
-				for(Access access : user.getAccesses()) {
-					Room room = access.getRoom();
-
-					MapDTO roomMap = new MapDTO();
-
-					roomMap.put("accessId", access.getId());
-					roomMap.put("address", room.getName() + ", " + room.getWing().getName() + ", " + room.getWing().getSociety().getName());
-					roomMap.put("status", access.getStatus().name());
-
-					if(access.getStatus() == Access.Status.ACTIVE) {
-						roomMap.put("statusText", "User is active.");
-					} else if(access.getStatus() == Access.Status.PENDING_VERIFICATION) {
-						roomMap.put("statusText", "User verification pending.");
-					} else if(access.getStatus() == Access.Status.INACTIVE) {
-						roomMap.put("statusText", "User is not active.");
-					} else if(access.getStatus() == Access.Status.DELETED) {
-						roomMap.put("statusText", "User is deleted.");
-					} else {
-						roomMap.put("statusText", "Invalid user status.");
-					}
-
-					map.getList("rooms").add(roomMap);
-				}
-
-				return map;
-			} else {
-				throw new EntityNotFoundException("Invalid mobile.");
+			for(Resident resident : residents) {
+				Room room = resident.getRoom();
+				
+				Society society = room.getWing().getSociety();
+				
+				Token token = new Token();
+				
+				token.setUserId(user.getId());
+				token.setUserName("");
+				token.setUserRole(resident.getRole().name());
+				token.setCreatedOn(dateTimeUtil.getCurrent());
+				token.set("userType", resident.getType().name());
+				token.set("societyId", society.getId());
+				token.set("societyName", society.getName());
+				token.set("roomId", room.getId());
+				token.set("roomName", room.getName());
+				
+				StringKeyMap option = new StringKeyMap();
+				
+				option.put("accountType", Account.Type.ROOM.name());
+				option.put("roomName", room.getName());
+				option.put("societyName", society.getName());
+				option.put("token", securityService.generateToken(token));
+				
+				options.add(option);
 			}
+			
+			List<Staff> staffs = staffRepository.findByUserId(user.getId());
+			
+			for(Staff staff : staffs) {
+				Society society = staff.getSociety();
+				
+				Token token = new Token();
+				
+				token.setUserId(user.getId());
+				token.setUserName("");
+				token.setUserRole(staff.getRole().name());
+				token.setCreatedOn(dateTimeUtil.getCurrent());
+				token.set("societyId", society.getId());
+				token.set("societyName", society.getName());
+				
+				StringKeyMap option = new StringKeyMap();
+				
+				option.put("accountType", Account.Type.STAFF.name());
+				option.put("societyName", society.getName());
+				option.put("token", securityService.generateToken(token));
+				
+				options.add(option);
+			}
+
+			return options;
 		} else {
-			Access access = accessRepository.findByIdAndPassword(loginDTO.getAccessId(), loginDTO.getPassword());
-
-			if(access != null) {
-				User user = access.getUser();
-
-				if(user.getMobile().equals(loginDTO.getMobile())) {
-					MapDTO map = new MapDTO();
-
-					if(access.getStatus() == Access.Status.PENDING_VERIFICATION) {
-						access.setStatus(Access.Status.ACTIVE);
-
-						access = accessRepository.save(access);
-					}
-
-					map.put("status", access.getStatus().name());
-
-					if(access.getStatus() == Access.Status.ACTIVE) {
-						map.put("statusText", "User is active.");
-						map.put("token", generateToken(user, user.getAccesses().iterator().next()));
-					} else if(access.getStatus() == Access.Status.INACTIVE) {
-						map.put("statusText", "User is not active.");
-						map.put("token", null);
-					} else if(access.getStatus() == Access.Status.DELETED) {
-						map.put("statusText", "User is deleted.");
-						map.put("token", null);
-					} else {
-						map.put("statusText", "Invalid user status.");
-						map.put("token", null);
-					}
-
-					return map;
-				} else {
-					throw new InvalidEntityException("Invalid mobile and room.");
-				}
-            } else {
-			    throw new EntityNotFoundException("Incorrect password.");
-            }
+			throw new EntityNotFoundException("Invalid mobile and password.");
 		}
 	}
 }

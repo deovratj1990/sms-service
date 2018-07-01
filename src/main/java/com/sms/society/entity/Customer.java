@@ -1,4 +1,4 @@
-package com.sms.user.entity;
+package com.sms.society.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.sms.accounting.entity.Account;
-import com.sms.society.entity.Society;
 
 @Entity
-public class Vendor {
+public class Customer {
 	public enum Status {
 		ACTIVE,
 		INACTIVE,

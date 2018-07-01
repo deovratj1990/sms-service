@@ -1,6 +1,10 @@
 package com.sms.common.dto;
 
-public class ResponseDTO extends MapDTO {
+import java.util.Map;
+
+import com.sms.common.model.StringKeyMap;
+
+public class ResponseDTO extends StringKeyMap {
 	public Integer getCode() {
 		return getInteger("code");
 	}
@@ -17,11 +21,15 @@ public class ResponseDTO extends MapDTO {
 		put("message", message);
 	}
 
-	public MapDTO getData() {
+	public Map<String, Object> getData() {
 		return getMap("data");
 	}
+	
+	public void addData(String key, Object value) {
+		getMap("data").put(key, value);
+	}
 
-	public void setData(MapDTO data) {
+	public void setData(Map<String, ? extends Object> data) {
 		put("data", data);
 	}
 }

@@ -1,18 +1,25 @@
 package com.sms.user.controller;
 
+import java.util.Set;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.sms.common.InvalidEntityException;
-import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
+import com.sms.common.model.StringKeyMap;
 import com.sms.common.validation.ValidationException;
 import com.sms.user.dto.user.LoginDTO;
 import com.sms.user.dto.user.RegisterDTO;
 import com.sms.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -36,11 +43,7 @@ public class UserController {
 
 			responseDTO.setMessage(ex.getMessage());
 
-			MapDTO map = new MapDTO();
-
-			map.put("validationError", ex.getValidationResult().getMap());
-
-			responseDTO.setData(map);
+			responseDTO.setData(ex.getValidationResult().getMessages());
 		} catch(EntityNotFoundException ex) {
 			responseDTO.setCode(HttpStatus.NOT_FOUND.value());
 
@@ -59,19 +62,19 @@ public class UserController {
 		ResponseDTO responseDTO = new ResponseDTO();
 
 		try {
-			MapDTO mapDTO = userService.login(loginDTO);
+			Set<StringKeyMap> options = userService.login(loginDTO);
 
 			responseDTO.setCode(HttpStatus.OK.value());
 
 			responseDTO.setMessage("Success");
 
-			responseDTO.setData(mapDTO);
+			responseDTO.addData("options", options);
 		} catch(ValidationException ex) {
 			responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
 
 			responseDTO.setMessage(ex.getMessage());
 
-			responseDTO.setData(ex.getValidationResult().getMap());
+			responseDTO.setData(ex.getValidationResult().getMessages());
 		} catch(EntityNotFoundException ex) {
 			responseDTO.setCode(HttpStatus.UNAUTHORIZED.value());
 

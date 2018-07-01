@@ -1,4 +1,4 @@
-package com.sms.user.entity;
+package com.sms.society.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +11,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.sms.accounting.entity.Account;
-import com.sms.society.entity.Society;
+import com.sms.user.entity.User;
 
 @Entity
-public class Customer {
+public class Staff {
+	public enum Role {
+		MANAGER
+	}
+	
 	public enum Status {
 		ACTIVE,
 		INACTIVE,
@@ -25,11 +29,17 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
 	@Column
 	private String name;
 	
 	@Column
 	private String mobile;
+	
+	@ManyToOne
+	private User user;
 	
 	@ManyToOne
 	private Society society;
@@ -47,6 +57,14 @@ public class Customer {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 
 	public String getName() {
 		return name;
@@ -62,6 +80,14 @@ public class Customer {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Society getSociety() {

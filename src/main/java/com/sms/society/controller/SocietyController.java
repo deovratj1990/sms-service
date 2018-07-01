@@ -1,7 +1,7 @@
 package com.sms.society.controller;
 
-import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
+import com.sms.common.model.StringKeyMap;
 import com.sms.society.dto.society.RegisterDTO;
 import com.sms.society.service.SocietyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class SocietyController {
             } else if(stateId != null) {
             } else if(countryId != null) {
             } else {
-                MapDTO map = new MapDTO();
+                StringKeyMap map = new StringKeyMap();
 
                 map.put("societies", societyService.getAllSocieties());
 

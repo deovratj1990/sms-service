@@ -1,7 +1,7 @@
 package com.sms.society.service.impl;
 
 import com.sms.address.repository.LocalityRepository;
-import com.sms.common.dto.MapDTO;
+import com.sms.common.model.StringKeyMap;
 import com.sms.society.dto.society.RegisterDTO;
 import com.sms.society.entity.Room;
 import com.sms.society.entity.Society;
@@ -36,9 +36,9 @@ public class SocietyServiceImpl implements SocietyService {
     @Autowired
     private RoomRepository roomRepository;
 
-    private MapDTO societyToMapDTO(Society society) {
+    private StringKeyMap societyToMapDTO(Society society) {
         if(society != null) {
-            MapDTO map = new MapDTO();
+            StringKeyMap map = new StringKeyMap();
 
             map.put("id", society.getId());
             map.put("name", society.getName());
@@ -54,7 +54,7 @@ public class SocietyServiceImpl implements SocietyService {
     }
 
     @Override
-    public MapDTO getSocietyById(Long id) throws Exception {
+    public StringKeyMap getSocietyById(Long id) throws Exception {
         Society society = societyRepository.findById(id).get();
 
         if(society != null) {
@@ -65,11 +65,11 @@ public class SocietyServiceImpl implements SocietyService {
     }
 
     @Override
-    public List<MapDTO> getAllSocieties() throws Exception {
+    public List<StringKeyMap> getAllSocieties() throws Exception {
         List<Society> societies = societyRepository.findAll();
 
         if(societies.size() != 0) {
-            List<MapDTO> maps = new ArrayList<MapDTO>();
+            List<StringKeyMap> maps = new ArrayList<StringKeyMap>();
 
             for(Society society : societies) {
                 maps.add(societyToMapDTO(society));

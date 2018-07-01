@@ -1,15 +1,15 @@
-package com.sms.common.dto;
+package com.sms.common.model;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class MapDTO extends HashMap<String, Object> {
-    public List<MapDTO> getList(String key) {
-        return (List<MapDTO>) this.get(key);
+public class StringKeyMap extends HashMap<String, Object> {
+    public List<StringKeyMap> getList(String key) {
+        return (List<StringKeyMap>) this.get(key);
     }
 
-    public MapDTO getMap(String key) {
-        return (MapDTO) this.get(key);
+    public StringKeyMap getMap(String key) {
+        return (StringKeyMap) this.get(key);
     }
 
     public String getString(String key) {

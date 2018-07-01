@@ -1,7 +1,7 @@
 package com.sms.common.service;
 
-import com.sms.common.dto.MapDTO;
+import com.sms.common.model.StringKeyMap;
 
 public interface CommonService {
-    public MapDTO getEnums();
+    public StringKeyMap getEnums();
 }

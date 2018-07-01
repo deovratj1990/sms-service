@@ -1,20 +1,20 @@
 package com.sms.user.dto.user;
 
 public class RegisterDTO {
-	private Long societyId;
+	private String mobile;
 	
 	private Long roomId;
 	
-	private String name;
+	private String password;
 	
-	private String mobile;
+	private String confirmPassword;
 
-	public Long getSocietyId() {
-		return societyId;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setSocietyId(Long societyId) {
-		this.societyId = societyId;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public Long getRoomId() {
@@ -25,19 +25,19 @@ public class RegisterDTO {
 		this.roomId = roomId;
 	}
 
-	public String getName() {
-		return name;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public String getConfirmPassword() {
+		return confirmPassword;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 }

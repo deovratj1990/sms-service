@@ -1,12 +1,12 @@
 package com.sms.society.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-import com.sms.society.entity.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.sms.society.entity.Room;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("select r from Room r inner join r.wing w inner join w.society s where s.id = :societyId")

@@ -1,7 +1,7 @@
 package com.sms.society.controller;
 
-import com.sms.common.dto.MapDTO;
 import com.sms.common.dto.ResponseDTO;
+import com.sms.common.model.StringKeyMap;
 import com.sms.common.validation.ValidationException;
 import com.sms.society.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class RoomController {
                 responseDTO.setData(roomService.getRoomByRoomId(roomId));
             } else if(wingId != null) {
             } else if(societyId != null) {
-                MapDTO map = new MapDTO();
+                StringKeyMap map = new StringKeyMap();
 
                 map.put("rooms", roomService.getRoomsBySocietyId(societyId));
 

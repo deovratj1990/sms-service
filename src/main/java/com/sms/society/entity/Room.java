@@ -1,11 +1,15 @@
 package com.sms.society.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.sms.accounting.entity.Account;
@@ -24,6 +28,13 @@ public class Room {
 	
 	@OneToOne
 	private Account account;
+	
+	@OneToMany(mappedBy = "room")
+	private Set<Resident> residents;
+	
+	public Room() {
+		residents = new HashSet<Resident>();
+	}
 
 	public Long getId() {
 		return id;
@@ -55,5 +66,13 @@ public class Room {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public Set<Resident> getResidents() {
+		return residents;
+	}
+
+	public void setResidents(Set<Resident> residents) {
+		this.residents = residents;
 	}
 }

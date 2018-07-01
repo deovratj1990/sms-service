@@ -1,6 +1,4 @@
-package com.sms.user.entity;
-
-import java.util.Date;
+package com.sms.society.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,18 +7,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.sms.accounting.entity.Account;
+
 @Entity
-public class Resident {
-	public enum Type {
-		MEMBER,
-		CHAIRMAN,
-		SECRETARY,
-		TRASURER,
-		TENANT
-	}
-	
+public class Vendor {
 	public enum Status {
 		ACTIVE,
 		INACTIVE,
@@ -37,11 +30,11 @@ public class Resident {
 	@Column
 	private String mobile;
 	
-	@Column
-	private Date residingFrom;
+	@ManyToOne
+	private Society society;
 	
 	@OneToOne
-	private User user;
+	private Account account;
 	
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -70,20 +63,20 @@ public class Resident {
 		this.mobile = mobile;
 	}
 
-	public Date getResidingFrom() {
-		return residingFrom;
+	public Society getSociety() {
+		return society;
 	}
 
-	public void setResidingFrom(Date residingFrom) {
-		this.residingFrom = residingFrom;
+	public void setSociety(Society society) {
+		this.society = society;
 	}
 
-	public User getUser() {
-		return user;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public Status getStatus() {

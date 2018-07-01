@@ -1,4 +1,6 @@
-package com.sms.user.entity;
+package com.sms.society.entity;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,16 +12,24 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.sms.accounting.entity.Account;
-import com.sms.society.entity.Society;
+import com.sms.user.entity.User;
 
 @Entity
-public class Staff {
+public class Resident {
 	public enum Type {
-		MANAGER
+		MEMBER,
+		TENANT
+	}
+	
+	public enum Role {
+		NA,
+		CHAIRMAN,
+		SECRETARY,
+		TRASURER
 	}
 	
 	public enum Status {
+		UNAPPROVED,
 		ACTIVE,
 		INACTIVE,
 		DELETED
@@ -29,23 +39,23 @@ public class Staff {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column
-	private String name;
-	
-	@Column
-	private String mobile;
-	
 	@Enumerated(EnumType.STRING)
 	private Type type;
+	
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
+	@ManyToOne
+	private Room room;
+	
+	@Column
+	private String otp;
 	
 	@OneToOne
 	private User user;
 	
-	@ManyToOne
-	private Society society;
-	
-	@OneToOne
-	private Account account;
+	@Column
+	private Date residingFrom;
 	
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -57,29 +67,37 @@ public class Staff {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
+	
 	public Type getType() {
 		return type;
 	}
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
 	}
 
 	public User getUser() {
@@ -90,20 +108,12 @@ public class Staff {
 		this.user = user;
 	}
 
-	public Society getSociety() {
-		return society;
+	public Date getResidingFrom() {
+		return residingFrom;
 	}
 
-	public void setSociety(Society society) {
-		this.society = society;
-	}
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setResidingFrom(Date residingFrom) {
+		this.residingFrom = residingFrom;
 	}
 
 	public Status getStatus() {
