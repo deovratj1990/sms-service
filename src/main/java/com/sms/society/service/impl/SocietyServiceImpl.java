@@ -1,6 +1,14 @@
 package com.sms.society.service.impl;
 
-import com.sms.address.repository.LocalityRepository;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.sms.common.model.StringKeyMap;
 import com.sms.society.dto.society.RegisterDTO;
 import com.sms.society.entity.Room;
@@ -11,21 +19,11 @@ import com.sms.society.repository.SocietyRepository;
 import com.sms.society.repository.WingRepository;
 import com.sms.society.service.SocietyService;
 import com.sms.society.validation.SocietyServiceValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class SocietyServiceImpl implements SocietyService {
     @Autowired
     private SocietyServiceValidator validator;
-
-    @Autowired
-    private LocalityRepository localityRepository;
 
     @Autowired
     private SocietyRepository societyRepository;
@@ -44,7 +42,6 @@ public class SocietyServiceImpl implements SocietyService {
             map.put("name", society.getName());
             map.put("wingCount", society.getWingCount());
             map.put("roomCount", society.getRoomCount());
-            map.put("localityId", society.getLocality().getId());
             map.put("status", society.getStatus());
 
             return map;
@@ -54,7 +51,7 @@ public class SocietyServiceImpl implements SocietyService {
     }
 
     @Override
-    public StringKeyMap getSocietyById(Long id) throws Exception {
+    public StringKeyMap getById(Long id) throws Exception {
         Society society = societyRepository.findById(id).get();
 
         if(society != null) {
@@ -65,7 +62,7 @@ public class SocietyServiceImpl implements SocietyService {
     }
 
     @Override
-    public List<StringKeyMap> getAllSocieties() throws Exception {
+    public List<StringKeyMap> getAll() throws Exception {
         List<Society> societies = societyRepository.findAll();
 
         if(societies.size() != 0) {
@@ -82,7 +79,7 @@ public class SocietyServiceImpl implements SocietyService {
     }
 
     @Override
-    public void registerSociety(RegisterDTO registerDTO) throws Exception {
+    public void register(RegisterDTO registerDTO) throws Exception {
         validator.validateRegister(registerDTO);
 
         Society society = new Society();

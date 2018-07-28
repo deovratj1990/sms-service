@@ -5,7 +5,7 @@ import java.util.List;
 import com.sms.common.model.StringKeyMap;
 
 public interface RoomService {
-    public StringKeyMap getRoomByRoomId(Long roomId) throws Exception;
+    public StringKeyMap getById(Long roomId) throws Exception;
 
-    public List<StringKeyMap> getRoomsBySocietyId(Long societyId) throws Exception;
+    public List<StringKeyMap> getBySocietyId(Long societyId) throws Exception;
 }

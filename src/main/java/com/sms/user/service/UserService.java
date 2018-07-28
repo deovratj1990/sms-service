@@ -8,7 +8,7 @@ import com.sms.user.dto.user.RegisterDTO;
 import com.sms.user.entity.User;
 
 public interface UserService {
-	public User getUserById(Long id);
+	public User getById(Long id);
 
 	public void register(RegisterDTO registerDTO) throws Exception;
 

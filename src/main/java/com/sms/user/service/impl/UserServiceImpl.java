@@ -2,9 +2,9 @@ package com.sms.user.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 
@@ -17,6 +17,7 @@ import com.sms.common.model.StringKeyMap;
 import com.sms.common.model.Token;
 import com.sms.common.service.SecurityService;
 import com.sms.society.entity.Resident;
+import com.sms.society.entity.ResidentRoom;
 import com.sms.society.entity.Room;
 import com.sms.society.entity.Society;
 import com.sms.society.entity.Staff;
@@ -58,21 +59,35 @@ public class UserServiceImpl implements UserService {
 	private SecurityService securityService;
 
 	@Override
-	public User getUserById(Long id) {
+	public User getById(Long id) {
 		return userRepository.findById(id).get();
+	}
+	
+	private String generatePassword() {
+		String allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		Random random = new Random();
+		
+		StringBuffer passwordBuffer = new StringBuffer();
+		
+		for(int index = 0; index < 10; index++) {
+			passwordBuffer.append(allowedChars.charAt(random.nextInt(allowedChars.length())));
+		}
+		
+		return passwordBuffer.toString();
 	}
 
 	@Override
 	public void register(RegisterDTO registerDTO) throws Exception {
 		validator.validateRegister(registerDTO);
 		
-		User user = userRepository.findByMobile(registerDTO.getMobile());
+		Room room = roomRepository.getOne(registerDTO.getRoomId());
+		
+		if(room != null) {
+			User user = userRepository.findByMobile(registerDTO.getMobile());
 
-		if(user == null) {
-			Room room = roomRepository.getOne(registerDTO.getRoomId());
-			
-			if(room != null) {
-				String passwordHash = securityService.generateHash(registerDTO.getPassword());
+			if(user == null) {
+				String passwordHash = securityService.generateHash(generatePassword());
 				
 				user = new User();
 
@@ -82,17 +97,15 @@ public class UserServiceImpl implements UserService {
 				user.setCreatedOn(dateTimeUtil.getCurrent());
 
 				user = userRepository.save(user);
-				
-				if(user != null) {
-					residentService.addMember(room, user);
-				} else {
-					throw new PersistenceException("Error while saving user.");
-				}
+			}
+			
+			if(user != null) {
+				residentService.addMember(room, user);
 			} else {
-				throw new EntityNotFoundException("Room does not exist.");
+				throw new PersistenceException("Error while saving user.");
 			}
 		} else {
-			throw new EntityExistsException("User with same mobile number already exists.");
+			throw new EntityNotFoundException("Room does not exist.");
 		}
 	}
 
@@ -112,30 +125,32 @@ public class UserServiceImpl implements UserService {
 			List<Resident> residents = residentRepository.findByUserId(user.getId());
 
 			for(Resident resident : residents) {
-				Room room = resident.getRoom();
+				Society society = resident.getSociety();
 				
-				Society society = room.getWing().getSociety();
-				
-				Token token = new Token();
-				
-				token.setUserId(user.getId());
-				token.setUserName("");
-				token.setUserRole(resident.getRole().name());
-				token.setCreatedOn(dateTimeUtil.getCurrent());
-				token.set("userType", resident.getType().name());
-				token.set("societyId", society.getId());
-				token.set("societyName", society.getName());
-				token.set("roomId", room.getId());
-				token.set("roomName", room.getName());
-				
-				StringKeyMap option = new StringKeyMap();
-				
-				option.put("accountType", Account.Type.ROOM.name());
-				option.put("roomName", room.getName());
-				option.put("societyName", society.getName());
-				option.put("token", securityService.generateToken(token));
-				
-				options.add(option);
+				for(ResidentRoom residentRoom : resident.getResidentRooms()) {
+					Room room = residentRoom.getRoom();
+					
+					Token token = new Token();
+					
+					token.setUserId(user.getId());
+					token.setUserName(resident.getName());
+					token.setUserRole(resident.getRole().name());
+					token.setCreatedOn(dateTimeUtil.getCurrent());
+					token.set("userType", residentRoom.getResidentType().name());
+					token.set("societyId", society.getId());
+					token.set("societyName", society.getName());
+					token.set("roomId", room.getId());
+					token.set("roomName", room.getName());
+					
+					StringKeyMap option = new StringKeyMap();
+					
+					option.put("accountType", Account.Type.ROOM.name());
+					option.put("roomName", room.getName());
+					option.put("societyName", society.getName());
+					option.put("token", securityService.generateToken(token));
+					
+					options.add(option);
+				}
 			}
 			
 			List<Staff> staffs = staffRepository.findByUserId(user.getId());

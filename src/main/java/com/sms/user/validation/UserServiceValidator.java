@@ -12,26 +12,16 @@ public class UserServiceValidator {
 	public void validateRegister(RegisterDTO registerDTO) throws Exception {
 		ValidationResult validationResult = new ValidationResult();
 		
-		if(registerDTO.getMobile() != null || registerDTO.getMobile().equals("")) {
+		if(registerDTO.getMobile() == null || registerDTO.getMobile().equals("")) {
 			validationResult.addError("mobile", "Mobile is mandatory.");
 		} else if(registerDTO.getMobile().length() != 10) {
 			validationResult.addError("mobile", "Mobile must be valid.");
 		}
 		
-		if(registerDTO.getRoomId() != null) {
+		if(registerDTO.getRoomId() == null) {
 			validationResult.addError("roomId", "Room is mandatory.");
-		} else if(registerDTO.getRoomId() > 0) {
+		} else if(registerDTO.getRoomId() <= 0) {
 			validationResult.addError("roomId", "Invalid Room.");
-		}
-		
-		if(registerDTO.getPassword() != null || registerDTO.getPassword().equals("")) {
-			validationResult.addError("password", "Password is mandatory.");
-		}
-		
-		if(registerDTO.getConfirmPassword() != null || registerDTO.getConfirmPassword().equals("")) {
-			validationResult.addError("confirmPassword", "Confirm Password is mandatory.");
-		} else if(!registerDTO.getConfirmPassword().equals(registerDTO.getPassword())) {
-			validationResult.addError("confirmPassword", "Confirm Password not matching with Password.");
 		}
 
 		if(validationResult.hasErrors()) {

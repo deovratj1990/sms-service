@@ -37,7 +37,7 @@ public class UserController {
 
 			responseDTO.setCode(HttpStatus.CREATED.value());
 
-			responseDTO.setMessage("Registration successful. Please collect Password from your Society Secretary and Login.");
+			responseDTO.setMessage("Registration successful. Please contact your Society Secretary for Account Activation and Login.");
 		} catch(ValidationException ex) {
 			responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
 

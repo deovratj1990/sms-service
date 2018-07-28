@@ -159,7 +159,7 @@ public class SecurityServiceImpl implements SecurityService {
 			try {
 				Token token = parseToken();
 				
-				User user = userService.getUserById(token.getUserId());
+				User user = userService.getById(token.getUserId());
 				
 				request.setAttribute("token", token);
 				request.setAttribute("user", user);

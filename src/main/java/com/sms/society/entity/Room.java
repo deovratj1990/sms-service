@@ -26,14 +26,14 @@ public class Room {
 	@ManyToOne
 	private Wing wing;
 	
+	@OneToMany(mappedBy = "room")
+	private Set<ResidentRoom> residentRooms;
+	
 	@OneToOne
 	private Account account;
 	
-	@OneToMany(mappedBy = "room")
-	private Set<Resident> residents;
-	
 	public Room() {
-		residents = new HashSet<Resident>();
+		residentRooms = new HashSet<ResidentRoom>();
 	}
 
 	public Long getId() {
@@ -59,6 +59,14 @@ public class Room {
 	public void setWing(Wing wing) {
 		this.wing = wing;
 	}
+	
+	public Set<ResidentRoom> getResidentRooms() {
+		return residentRooms;
+	}
+
+	public void setResidentRooms(Set<ResidentRoom> residentRooms) {
+		this.residentRooms = residentRooms;
+	}
 
 	public Account getAccount() {
 		return account;
@@ -66,13 +74,5 @@ public class Room {
 
 	public void setAccount(Account account) {
 		this.account = account;
-	}
-
-	public Set<Resident> getResidents() {
-		return residents;
-	}
-
-	public void setResidents(Set<Resident> residents) {
-		this.residents = residents;
 	}
 }

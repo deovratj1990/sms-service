@@ -1,6 +1,7 @@
 package com.sms.society.entity;
 
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.sms.user.entity.User;
@@ -28,25 +30,21 @@ public class Resident {
 		TRASURER
 	}
 	
-	public enum Status {
-		UNAPPROVED,
-		ACTIVE,
-		INACTIVE,
-		DELETED
-	}
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Enumerated(EnumType.STRING)
-	private Type type;
+	@Column
+	private String name;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
 	@ManyToOne
-	private Room room;
+	private Society society;
+	
+	@OneToMany(mappedBy = "resident")
+	private Set<ResidentRoom> residentRooms;
 	
 	@Column
 	private String otp;
@@ -54,11 +52,9 @@ public class Resident {
 	@OneToOne
 	private User user;
 	
-	@Column
-	private Date residingFrom;
-	
-	@Enumerated(EnumType.STRING)
-	private Status status;
+	public Resident() {
+		residentRooms = new HashSet<ResidentRoom>();
+	}
 
 	public Long getId() {
 		return id;
@@ -67,13 +63,13 @@ public class Resident {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public Type getType() {
-		return type;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Role getRole() {
@@ -84,12 +80,24 @@ public class Resident {
 		this.role = role;
 	}
 
-	public Room getRoom() {
-		return room;
+	public Society getSociety() {
+		return society;
 	}
 
-	public void setRoom(Room room) {
-		this.room = room;
+	public void setSociety(Society society) {
+		this.society = society;
+	}
+
+	public Set<ResidentRoom> getResidentRooms() {
+		return residentRooms;
+	}
+	
+	public void addResidentRoom(ResidentRoom residentRoom) {
+		residentRooms.add(residentRoom);
+	}
+
+	public void setResidentRooms(Set<ResidentRoom> residentRooms) {
+		this.residentRooms = residentRooms;
 	}
 
 	public String getOtp() {
@@ -106,21 +114,5 @@ public class Resident {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Date getResidingFrom() {
-		return residingFrom;
-	}
-
-	public void setResidingFrom(Date residingFrom) {
-		this.residingFrom = residingFrom;
-	}
-
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
 	}
 }

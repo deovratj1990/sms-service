@@ -33,7 +33,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public StringKeyMap getRoomByRoomId(Long roomId) throws Exception {
+    public StringKeyMap getById(Long roomId) throws Exception {
         Room room = roomRepository.findById(roomId).get();
 
         if(room != null) {
@@ -44,7 +44,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<StringKeyMap> getRoomsBySocietyId(Long societyId) throws Exception {
+    public List<StringKeyMap> getBySocietyId(Long societyId) throws Exception {
         List<Room> rooms = roomRepository.findBySocietyId(societyId);
 
         if(rooms.size() != 0) {
