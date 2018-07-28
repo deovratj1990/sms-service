@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.OneToOne;
 import com.sms.common.converter.ZonedDateTimeConverter;
 import com.sms.user.entity.User;
 
+@Entity
 public class Transaction {
 	public enum PaymentMode {
 	    CASH,

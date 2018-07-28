@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.sms.society.entity.Resident;
 
 public interface ResidentRepository extends JpaRepository<Resident, Long> {
-	@Query("select r Resident r inner join User u where u.id = :userId")
+	@Query("select r from Resident r inner join User u where u.id = :userId")
     public List<Resident> findByUserId(@Param("userId") Long userId);
 }
