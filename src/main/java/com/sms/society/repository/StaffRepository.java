@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.sms.society.entity.Staff;
 
 public interface StaffRepository extends JpaRepository<Staff, Long> {
-	@Query("select f from Staff f inner join User u where u.id = :userId")
+	@Query("select s from Staff s inner join s.user u where u.id = :userId")
 	public List<Staff> findByUserId(@Param("userId") Long userId);
 }

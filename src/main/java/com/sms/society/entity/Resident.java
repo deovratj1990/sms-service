@@ -37,6 +37,9 @@ public class Resident {
 	@Column
 	private String name;
 	
+	@Column
+	private String mobile;
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
@@ -70,6 +73,14 @@ public class Resident {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public Role getRole() {

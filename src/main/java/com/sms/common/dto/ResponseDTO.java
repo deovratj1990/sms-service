@@ -5,6 +5,12 @@ import java.util.Map;
 import com.sms.common.model.StringKeyMap;
 
 public class ResponseDTO extends StringKeyMap {
+	public ResponseDTO() {
+		setCode(0);
+		setMessage("");
+		setData(new StringKeyMap());
+	}
+	
 	public Integer getCode() {
 		return getInteger("code");
 	}
@@ -21,7 +27,7 @@ public class ResponseDTO extends StringKeyMap {
 		put("message", message);
 	}
 
-	public Map<String, Object> getData() {
+	public Map<String, ?> getData() {
 		return getMap("data");
 	}
 	
@@ -29,7 +35,7 @@ public class ResponseDTO extends StringKeyMap {
 		getMap("data").put(key, value);
 	}
 
-	public void setData(Map<String, ? extends Object> data) {
+	public void setData(Map<String, ?> data) {
 		put("data", data);
 	}
 }

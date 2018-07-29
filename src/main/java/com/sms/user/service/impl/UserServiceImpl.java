@@ -1,5 +1,6 @@
 package com.sms.user.service.impl;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -21,10 +22,10 @@ import com.sms.society.entity.ResidentRoom;
 import com.sms.society.entity.Room;
 import com.sms.society.entity.Society;
 import com.sms.society.entity.Staff;
-import com.sms.society.repository.ResidentRepository;
+import com.sms.society.repository.ResidentRoomRepository;
 import com.sms.society.repository.RoomRepository;
 import com.sms.society.repository.StaffRepository;
-import com.sms.society.service.ResidentService;
+import com.sms.society.service.SocietyService;
 import com.sms.user.dto.user.LoginDTO;
 import com.sms.user.dto.user.RegisterDTO;
 import com.sms.user.entity.User;
@@ -47,13 +48,13 @@ public class UserServiceImpl implements UserService {
 	private RoomRepository roomRepository;
 	
 	@Autowired
-	private ResidentRepository residentRepository;
+	private ResidentRoomRepository residentRoomRepository;
 	
 	@Autowired
 	private StaffRepository staffRepository;
 	
 	@Autowired
-	private ResidentService residentService;
+	private SocietyService societyService;
 
 	@Autowired
 	private SecurityService securityService;
@@ -100,7 +101,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			if(user != null) {
-				residentService.addMember(room, user);
+				societyService.addMember(room, user);
 			} else {
 				throw new PersistenceException("Error while saving user.");
 			}
@@ -115,42 +116,42 @@ public class UserServiceImpl implements UserService {
 
 		validator.validateLogin(loginDTO);
 		
-		String passwordHash = securityService.generateHash(loginDTO.getPassword());
+		String passwordHash = loginDTO.getPassword();//securityService.generateHash(loginDTO.getPassword());
 		
 		User user = userRepository.findByMobileAndPassword(loginDTO.getMobile(), passwordHash);
 		
 		if(user != null) {
 			Set<StringKeyMap> options = new HashSet<StringKeyMap>();
 			
-			List<Resident> residents = residentRepository.findByUserId(user.getId());
-
-			for(Resident resident : residents) {
+			List<ResidentRoom> residentRooms = residentRoomRepository.findByUserId(user.getId());
+			
+			for(ResidentRoom residentRoom : residentRooms) {
+				Resident resident = residentRoom.getResident();
+				
 				Society society = resident.getSociety();
 				
-				for(ResidentRoom residentRoom : resident.getResidentRooms()) {
-					Room room = residentRoom.getRoom();
-					
-					Token token = new Token();
-					
-					token.setUserId(user.getId());
-					token.setUserName(resident.getName());
-					token.setUserRole(resident.getRole().name());
-					token.setCreatedOn(dateTimeUtil.getCurrent());
-					token.set("userType", residentRoom.getResidentType().name());
-					token.set("societyId", society.getId());
-					token.set("societyName", society.getName());
-					token.set("roomId", room.getId());
-					token.set("roomName", room.getName());
-					
-					StringKeyMap option = new StringKeyMap();
-					
-					option.put("accountType", Account.Type.ROOM.name());
-					option.put("roomName", room.getName());
-					option.put("societyName", society.getName());
-					option.put("token", securityService.generateToken(token));
-					
-					options.add(option);
-				}
+				Room room = residentRoom.getRoom();
+				
+				Token token = new Token();
+				
+				token.setUserId(user.getId());
+				token.setUserName(resident.getName());
+				token.setUserType(residentRoom.getResidentType().name());
+				token.setUserRole(resident.getRole().name());
+				token.setSocietyId(society.getId());
+				token.setSocietyName(society.getName());
+				token.setRoomId(room.getId());
+				token.setRoomName(room.getName());
+				token.setIssuedAt(new Date());
+				
+				StringKeyMap option = new StringKeyMap();
+				
+				option.put("accountType", residentRoom.getResidentType().name());
+				option.put("roomName", room.getName());
+				option.put("societyName", society.getName());
+				option.put("token", securityService.generateToken(token));
+				
+				options.add(option);
 			}
 			
 			List<Staff> staffs = staffRepository.findByUserId(user.getId());
@@ -162,10 +163,11 @@ public class UserServiceImpl implements UserService {
 				
 				token.setUserId(user.getId());
 				token.setUserName("");
+				token.setUserType("NA");
 				token.setUserRole(staff.getRole().name());
-				token.setCreatedOn(dateTimeUtil.getCurrent());
-				token.set("societyId", society.getId());
-				token.set("societyName", society.getName());
+				token.setSocietyId(society.getId());
+				token.setSocietyName(society.getName());
+				token.setIssuedAt(new Date());
 				
 				StringKeyMap option = new StringKeyMap();
 				

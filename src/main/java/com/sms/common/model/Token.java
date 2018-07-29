@@ -1,11 +1,29 @@
 package com.sms.common.model;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 
-public class Token extends StringKeyMap {
+public class Token {
 	private String authorizationType;
 	
 	private String text;
+	
+	private Long userId;
+	
+	private String userName;
+	
+	private String userType;
+	
+	private String userRole;
+	
+	private Long societyId;
+	
+	private String societyName;
+	
+	private Long roomId;
+	
+	private String roomName;
+	
+	private Date issuedAt;
 	
 	public String getAuthorizationType() {
 		return authorizationType;
@@ -24,38 +42,74 @@ public class Token extends StringKeyMap {
 	}
 
 	public Long getUserId() {
-		return getLong("userId");
+		return userId;
 	}
 
 	public void setUserId(Long userId) {
-		put("userId", userId);
+		this.userId = userId;
 	}
-	
+
 	public String getUserName() {
-		return getString("userName");
+		return userName;
 	}
 
 	public void setUserName(String userName) {
-		put("userName", userName);
+		this.userName = userName;
 	}
 	
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
 	public String getUserRole() {
-		return getString("userRole");
+		return userRole;
 	}
 
 	public void setUserRole(String userRole) {
-		put("userRole", userRole);
-	}
-	
-	public ZonedDateTime getCreatedOn() {
-		return (ZonedDateTime) get("createdOn");
+		this.userRole = userRole;
 	}
 
-	public void setCreatedOn(ZonedDateTime createdOn) {
-		put("createdOn", createdOn);
+	public Long getSocietyId() {
+		return societyId;
 	}
-	
-	public void set(String key, Object value) {
-		put(key, value);
+
+	public void setSocietyId(Long societyId) {
+		this.societyId = societyId;
+	}
+
+	public String getSocietyName() {
+		return societyName;
+	}
+
+	public void setSocietyName(String societyName) {
+		this.societyName = societyName;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
+
+	public String getRoomName() {
+		return roomName;
+	}
+
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+
+	public Date getIssuedAt() {
+		return issuedAt;
+	}
+
+	public void setIssuedAt(Date issuedAt) {
+		this.issuedAt = issuedAt;
 	}
 }

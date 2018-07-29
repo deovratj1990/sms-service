@@ -66,9 +66,13 @@ public class UserController {
 
 			responseDTO.setCode(HttpStatus.OK.value());
 
-			responseDTO.setMessage("Success");
+			if(options.size() > 1) {
+				responseDTO.setMessage("Please select option for login!");
+			} else {
+				responseDTO.setMessage("Login successful!");
+			}
 
-			responseDTO.addData("options", options);
+			responseDTO.addData("users", options);
 		} catch(ValidationException ex) {
 			responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
 

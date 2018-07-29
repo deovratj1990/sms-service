@@ -87,18 +87,34 @@ public class SecurityServiceImpl implements SecurityService {
 	public String generateToken(Token token) {
 		Claims claims = Jwts.claims();
 
-		claims.putAll(token);
+		claims.put("userId", token.getUserId());
+		claims.put("userName", token.getUserName());
+		claims.put("userType", token.getUserType());
+		claims.put("userRole", token.getUserRole());
+		claims.put("societyId", token.getSocietyId());
+		claims.put("societyName", token.getSocietyName());
+		claims.put("roomId", token.getRoomId());
+		claims.put("roomName", token.getRoomName());
+		claims.setIssuedAt(token.getIssuedAt());
 
 		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, TOKEN_SECRET).compact();
 	}
 	
 	@Override
 	public boolean isAuthorizationRequired() {
+		if(request.getMethod().toUpperCase().equals("OPTIONS")) {
+			return false;
+		}
+		
 		if(PUBLIC_URIS != null) {
 			String[] publicUris = PUBLIC_URIS.split("\\|");
 			
 			for(String publicUri : publicUris) {
-				if(request.getRequestURI().equals(publicUri)) {
+				System.out.println(request.getRequestURI());
+				
+				System.out.println(publicUri);
+				
+				if(request.getRequestURI().startsWith(publicUri)) {
 					return false;
 				}
 			}
@@ -125,7 +141,15 @@ public class SecurityServiceImpl implements SecurityService {
                     
                 	token.setAuthorizationType(authorizationType);
                 	token.setText(authorizationToken);
-                	token.putAll(claims);
+                	token.setUserId(Long.valueOf(claims.get("userId").toString()));
+                	token.setUserName((String) claims.get("userName"));
+                	token.setUserType((String) claims.get("userType"));
+                	token.setUserRole((String) claims.get("userRole"));
+                	token.setSocietyId(Long.valueOf(claims.get("societyId").toString()));
+                	token.setSocietyName((String) claims.get("societyName"));
+                	token.setRoomId(Long.valueOf(claims.get("roomId").toString()));
+                	token.setRoomName((String) claims.get("roomName"));
+                	token.setIssuedAt(claims.getIssuedAt());
                     
                     return token;
                 } else {
