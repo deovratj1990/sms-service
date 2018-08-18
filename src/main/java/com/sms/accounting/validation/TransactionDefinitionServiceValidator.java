@@ -23,15 +23,15 @@ public class TransactionDefinitionServiceValidator {
             validationResult.addError("costHeaderId", "Cost header ID is mandatory.");
         }
 
-        if(saveDTO.getTransactionFrom() == null) {
+        if(saveDTO.getFromAccountType() == null) {
             validationResult.addError("transactionFrom", "Transaction from is mandatory.");
-        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getTransactionFrom()) < 0) {
+        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getFromAccountType()) < 0) {
             validationResult.addError("transactionFrom", "Transaction from must be valid.");
         }
 
-        if(saveDTO.getTransactionTo() == null) {
+        if(saveDTO.getToAccountType() == null) {
             validationResult.addError("transactionTo", "Transaction to is mandatory.");
-        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getTransactionTo()) < 0) {
+        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getToAccountType()) < 0) {
             validationResult.addError("transactionTo", "Transaction to must be valid.");
         }
 
@@ -41,9 +41,9 @@ public class TransactionDefinitionServiceValidator {
             validationResult.addError("interval", "Interval must be valid.");
         }
 
-        if(saveDTO.getFrom() == null) {
+        if(saveDTO.getApplicableFrom() == null) {
             validationResult.addError("frpm", "From is mandatory.");
-        } else if(!saveDTO.getFrom().matches(dateTimeRegex)) {
+        } else if(!saveDTO.getApplicableFrom().matches(dateTimeRegex)) {
             validationResult.addError("from", "From must be valid.");
         }
 
@@ -56,12 +56,6 @@ public class TransactionDefinitionServiceValidator {
                 boolean particularsValidated = true;
 
                 for(SaveDTO.Particular particularDTO : saveDTO.getParticulars()) {
-                    if(particularDTO.getCostHeader().getName() == null || particularDTO.getCostHeader().getName().equals("")) {
-                        validationResult.addError("particularName", "Particular name must be valid.");
-
-                        particularsValidated = false;
-                    }
-
                     if(particularDTO.getAmount() == null || particularDTO.getAmount() <= 0) {
                         validationResult.addError("particularAmount", "Particular amount must be valid.");
 

@@ -73,7 +73,7 @@ public class CostHeaderController {
             data.put("costHeader", costHeaderService.create(saveDTO));
 
             responseDTO.setCode(HttpStatus.CREATED.value());
-            responseDTO.setMessage("Cost header saved successfully.");
+            responseDTO.setMessage("Cost header created successfully.");
             responseDTO.setData(data);
         } catch(ValidationException ex) {
             responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
@@ -96,7 +96,7 @@ public class CostHeaderController {
             data.put("costHeader", costHeaderService.update(id, saveDTO));
 
             responseDTO.setCode(HttpStatus.OK.value());
-            responseDTO.setMessage("Cost header edited successfully.");
+            responseDTO.setMessage("Cost header updated successfully.");
             responseDTO.setData(data);
         } catch(ValidationException ex) {
             responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
