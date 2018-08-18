@@ -110,10 +110,6 @@ public class SecurityServiceImpl implements SecurityService {
 			String[] publicUris = PUBLIC_URIS.split("\\|");
 			
 			for(String publicUri : publicUris) {
-				System.out.println(request.getRequestURI());
-				
-				System.out.println(publicUri);
-				
 				if(request.getRequestURI().startsWith(publicUri)) {
 					return false;
 				}
