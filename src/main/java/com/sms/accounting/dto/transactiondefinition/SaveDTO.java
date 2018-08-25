@@ -4,48 +4,16 @@ import java.util.Set;
 
 public class SaveDTO {
     public class Particular {
-        public class CostHeader {
-            private Long id;
-
-            private String name;
-
-            public Long getId() {
-                return id;
-            }
-
-            public void setId(Long id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-        }
-
-        private Long id;
-
-        private CostHeader costHeader;
+        private Long costHeaderId;
 
         private Double amount;
 
-        public Long getId() {
-            return id;
+        public Long getCostHeaderId() {
+            return costHeaderId;
         }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public CostHeader getCostHeader() {
-            return costHeader;
-        }
-
-        public void setCostHeader(CostHeader costHeader) {
-            this.costHeader = costHeader;
+        public void setCostHeader(Long costHeaderId) {
+            this.costHeaderId = costHeaderId;
         }
 
         public Double getAmount() {
@@ -59,13 +27,13 @@ public class SaveDTO {
 
     private Long costHeaderId;
 
-    private String transactionFrom;
+    private String fromAccountType;
 
-    private String transactionTo;
+    private String toAccountType;
 
     private String interval;
 
-    private String from;
+    private String applicableFrom;
 
     private Boolean hasParticulars;
 
@@ -73,67 +41,67 @@ public class SaveDTO {
 
     private Double amount;
 
-    public Long getCostHeaderId() {
-        return costHeaderId;
-    }
+	public Long getCostHeaderId() {
+		return costHeaderId;
+	}
 
-    public void setCostHeaderId(Long costHeaderId) {
-        this.costHeaderId = costHeaderId;
-    }
+	public void setCostHeaderId(Long costHeaderId) {
+		this.costHeaderId = costHeaderId;
+	}
 
-    public String getTransactionFrom() {
-        return transactionFrom;
-    }
+	public String getFromAccountType() {
+		return fromAccountType;
+	}
 
-    public void setTransactionFrom(String transactionFrom) {
-        this.transactionFrom = transactionFrom;
-    }
+	public void setFromAccountType(String fromAccountType) {
+		this.fromAccountType = fromAccountType;
+	}
 
-    public String getTransactionTo() {
-        return transactionTo;
-    }
+	public String getToAccountType() {
+		return toAccountType;
+	}
 
-    public void setTransactionTo(String transactionTo) {
-        this.transactionTo = transactionTo;
-    }
+	public void setToAccountType(String toAccountType) {
+		this.toAccountType = toAccountType;
+	}
 
-    public String getInterval() {
-        return interval;
-    }
+	public String getInterval() {
+		return interval;
+	}
 
-    public void setInterval(String interval) {
-        this.interval = interval;
-    }
+	public void setInterval(String interval) {
+		this.interval = interval;
+	}
 
-    public String getFrom() {
-        return from;
-    }
+	public String getApplicableFrom() {
+		return applicableFrom;
+	}
 
-    public void setFrom(String from) {
-        this.from = from;
-    }
+	public void setApplicableFrom(String applicableFrom) {
+		this.applicableFrom = applicableFrom;
+	}
 
-    public Boolean getHasParticulars() {
-        return hasParticulars;
-    }
+	public Boolean getHasParticulars() {
+		return hasParticulars;
+	}
 
-    public void setHasParticulars(Boolean hasParticulars) {
-        this.hasParticulars = hasParticulars;
-    }
+	public void setHasParticulars(Boolean hasParticulars) {
+		this.hasParticulars = hasParticulars;
+	}
 
-    public Set<Particular> getParticulars() {
-        return particulars;
-    }
+	public Set<Particular> getParticulars() {
+		return particulars;
+	}
 
-    public void setParticulars(Set<Particular> particulars) {
-        this.particulars = particulars;
-    }
+	public void setParticulars(Set<Particular> particulars) {
+		this.particulars = particulars;
+	}
 
-    public Double getAmount() {
-        return amount;
-    }
+	public Double getAmount() {
+		return amount;
+	}
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
 }

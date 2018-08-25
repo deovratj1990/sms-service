@@ -42,10 +42,10 @@ public class TransactionDefinition {
     private CostHeader costHeader;
 
     @Enumerated(EnumType.STRING)
-    private Account.Type transactionFrom;
+    private Account.Type fromAccountType;
 
     @Enumerated(EnumType.STRING)
-    private Account.Type transactionTo;
+    private Account.Type toAccountType;
 
     @Column(name = "intervalType")
     @Enumerated(EnumType.STRING)
@@ -53,7 +53,10 @@ public class TransactionDefinition {
     
     @Column(name = "fromDate")
     @Convert(converter = ZonedDateTimeConverter.class)
-    private ZonedDateTime from;
+    private ZonedDateTime applicableFrom;
+    
+    @Column
+    private Boolean hasParticulars;
 
     @OneToMany(mappedBy = "transactionDefinition")
     private Set<Particular> particulars;
@@ -91,39 +94,47 @@ public class TransactionDefinition {
         this.costHeader = costHeader;
     }
 
-    public Account.Type getTransactionFrom() {
-        return transactionFrom;
-    }
+    public Account.Type getFromAccountType() {
+		return fromAccountType;
+	}
 
-    public void setTransactionFrom(Account.Type transactionFrom) {
-        this.transactionFrom = transactionFrom;
-    }
+	public void setFromAccountType(Account.Type fromAccountType) {
+		this.fromAccountType = fromAccountType;
+	}
 
-    public Account.Type getTransactionTo() {
-        return transactionTo;
-    }
+	public Account.Type getToAccountType() {
+		return toAccountType;
+	}
 
-    public void setTransactionTo(Account.Type transactionTo) {
-        this.transactionTo = transactionTo;
-    }
+	public void setToAccountType(Account.Type toAccountType) {
+		this.toAccountType = toAccountType;
+	}
 
-    public Interval getInterval() {
+	public Interval getInterval() {
         return interval;
     }
 
     public void setInterval(Interval interval) {
         this.interval = interval;
     }
-    
-    public ZonedDateTime getFrom() {
-        return from;
-    }
 
-    public void setFrom(ZonedDateTime from) {
-        this.from = from;
-    }
+    public ZonedDateTime getApplicableFrom() {
+		return applicableFrom;
+	}
 
-    public Set<Particular> getParticulars() {
+	public void setApplicableFrom(ZonedDateTime applicableFrom) {
+		this.applicableFrom = applicableFrom;
+	}
+
+	public Boolean getHasParticulars() {
+		return hasParticulars;
+	}
+
+	public void setHasParticulars(Boolean hasParticulars) {
+		this.hasParticulars = hasParticulars;
+	}
+
+	public Set<Particular> getParticulars() {
         return particulars;
     }
 
