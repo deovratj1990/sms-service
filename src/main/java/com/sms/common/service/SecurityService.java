@@ -18,7 +18,7 @@ public interface SecurityService {
 	
 	public void sendTokenErrorResponse(String message) throws Exception;
 	
-	public void authorizeRequest() throws Exception;
+	public boolean authorizeRequest() throws Exception;
 	
 	public Token getRequestToken();
 	

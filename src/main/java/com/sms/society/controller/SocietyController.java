@@ -24,7 +24,7 @@ import com.sms.society.dto.society.RegisterDTO;
 import com.sms.society.service.SocietyService;
 
 @RestController
-@RequestMapping(path = "/society")
+@RequestMapping(path = "/societies")
 @CrossOrigin(origins = "*")
 public class SocietyController {
 	@Autowired
@@ -33,7 +33,7 @@ public class SocietyController {
     @Autowired
     private SocietyService societyService;
     
-    @RequestMapping(path = "/getById/{societyId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{societyId}", method = RequestMethod.GET)
     public ResponseEntity<ResponseDTO> getById(@PathVariable Long societyId) {
         ResponseDTO responseDTO = new ResponseDTO();
 
@@ -57,7 +57,7 @@ public class SocietyController {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(path = "", method = RequestMethod.GET)
     public ResponseEntity<ResponseDTO> getAll() {
         ResponseDTO responseDTO = new ResponseDTO();
 
@@ -81,7 +81,7 @@ public class SocietyController {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<ResponseDTO> registerSociety(@RequestBody RegisterDTO registerDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
 

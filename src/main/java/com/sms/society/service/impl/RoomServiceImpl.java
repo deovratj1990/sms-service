@@ -46,17 +46,26 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<StringKeyMap> getBySocietyId(Long societyId) throws Exception {
         List<Room> rooms = roomRepository.findBySocietyId(societyId);
+        
+        List<StringKeyMap> maps = new ArrayList<StringKeyMap>();
 
-        if(rooms.size() != 0) {
-            List<StringKeyMap> maps = new ArrayList<StringKeyMap>();
-
-            for(Room room : rooms) {
-                maps.add(roomToMapDTO(room));
-            }
-
-            return maps;
-        } else {
-            throw new EntityNotFoundException("No Data.");
+        for(Room room : rooms) {
+            maps.add(roomToMapDTO(room));
         }
+
+        return maps;
     }
+
+	@Override
+	public List<StringKeyMap> getAll() throws Exception {
+		List<Room> rooms = roomRepository.findAll();
+		
+		List<StringKeyMap> maps = new ArrayList<StringKeyMap>();
+
+        for(Room room : rooms) {
+            maps.add(roomToMapDTO(room));
+        }
+
+        return maps;
+	}
 }

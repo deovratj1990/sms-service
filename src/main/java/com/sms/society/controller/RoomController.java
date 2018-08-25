@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sms.common.dto.ResponseDTO;
@@ -17,14 +18,14 @@ import com.sms.common.validation.ValidationException;
 import com.sms.society.service.RoomService;
 
 @RestController
-@RequestMapping(path = "/room")
+@RequestMapping(path = "/rooms")
 @CrossOrigin(origins = "*")
 public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    @RequestMapping(path = "/getById", method = RequestMethod.GET)
-    public ResponseEntity<ResponseDTO> getById(@PathVariable Long roomId) {
+    @RequestMapping(path = "/{roomId}", method = RequestMethod.GET)
+    public ResponseEntity<ResponseDTO> read(@PathVariable Long roomId) {
         ResponseDTO responseDTO = new ResponseDTO();
 
         try {
@@ -46,14 +47,18 @@ public class RoomController {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
     
-    @RequestMapping(path = "/getBySocietyId/{societyId}", method = RequestMethod.GET)
-    public ResponseEntity<ResponseDTO> getBySocietyId(@PathVariable Long societyId) {
+    @RequestMapping(path = "", method = RequestMethod.GET)
+    public ResponseEntity<ResponseDTO> readAll(@RequestParam(required = false) Long societyId) {
         ResponseDTO responseDTO = new ResponseDTO();
 
         try {
         	StringKeyMap map = new StringKeyMap();
 
-            map.put("rooms", roomService.getBySocietyId(societyId));
+            if(societyId != null) {
+            	map.put("rooms", roomService.getBySocietyId(societyId));
+            } else {
+            	map.put("rooms", roomService.getAll());
+            }
 
             responseDTO.setData(map);
 

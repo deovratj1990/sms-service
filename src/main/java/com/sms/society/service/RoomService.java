@@ -8,4 +8,6 @@ public interface RoomService {
     public StringKeyMap getById(Long roomId) throws Exception;
 
     public List<StringKeyMap> getBySocietyId(Long societyId) throws Exception;
+    
+    public List<StringKeyMap> getAll() throws Exception;
 }

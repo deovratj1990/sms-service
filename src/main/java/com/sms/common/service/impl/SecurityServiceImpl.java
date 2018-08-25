@@ -110,10 +110,6 @@ public class SecurityServiceImpl implements SecurityService {
 			String[] publicUris = PUBLIC_URIS.split("\\|");
 			
 			for(String publicUri : publicUris) {
-				System.out.println(request.getRequestURI());
-				
-				System.out.println(publicUri);
-				
 				if(request.getRequestURI().startsWith(publicUri)) {
 					return false;
 				}
@@ -178,7 +174,7 @@ public class SecurityServiceImpl implements SecurityService {
 	}
 	
 	@Override
-	public void authorizeRequest() throws Exception {
+	public boolean authorizeRequest() throws Exception {
 		if(isAuthorizationRequired()) {
 			try {
 				Token token = parseToken();
@@ -187,9 +183,15 @@ public class SecurityServiceImpl implements SecurityService {
 				
 				request.setAttribute("token", token);
 				request.setAttribute("user", user);
+				
+				return true;
 			} catch(Exception ex) {
 				sendTokenErrorResponse(ex.getMessage());
+				
+				return false;
 			}
+		} else {
+			return true;
 		}
 	}
 	
