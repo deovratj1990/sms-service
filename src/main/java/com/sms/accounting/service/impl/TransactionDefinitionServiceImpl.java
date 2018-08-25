@@ -66,6 +66,7 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
         
         StringKeyMap data = new StringKeyMap();
         
+        data.put("id", transactionDefinition.getId());
         data.put("costHeader", costHeaderData);
         data.put("fromAccountType", transactionDefinition.getFromAccountType());
         data.put("toAccountType", transactionDefinition.getToAccountType());
@@ -111,7 +112,7 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
             transactionDefinition.setFromAccountType(Account.Type.valueOf(saveDTO.getFromAccountType()));
             transactionDefinition.setToAccountType(Account.Type.valueOf(saveDTO.getToAccountType()));
             transactionDefinition.setInterval(TransactionDefinition.Interval.valueOf(saveDTO.getInterval()));
-            transactionDefinition.setApplicableFrom(ZonedDateTime.parse(saveDTO.getApplicableFrom(), dateTimeFormatter));
+            transactionDefinition.setApplicableFrom(ZonedDateTime.parse(saveDTO.getApplicableFromFormatted(), dateTimeFormatter));
             transactionDefinition.setHasParticulars(saveDTO.getHasParticulars());
 
             if(saveDTO.getHasParticulars()) {
@@ -138,11 +139,15 @@ public class TransactionDefinitionServiceImpl implements TransactionDefinitionSe
             } else {
                 transactionDefinition.setAmount(saveDTO.getAmount());
             }
+            
+            transactionDefinition.setStatus(TransactionDefinition.Status.ACTIVE);
 
             transactionDefinition = transactionDefinitionRepository.save(transactionDefinition);
 
             if(transactionDefinition.getParticulars().size() > 0) {
                 for(Particular particular : transactionDefinition.getParticulars()) {
+                	particular.setTransactionDefinition(transactionDefinition);
+                	
                     particularRepository.save(particular);
                 }
             }

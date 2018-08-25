@@ -1,7 +1,5 @@
 package com.sms.accounting.validation;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +11,9 @@ import com.sms.common.validation.ValidationResult;
 
 @Component
 public class TransactionDefinitionServiceValidator {
-    @Autowired
-    private String dateTimeRegex;
-
+	@Autowired
+	private String dateTimeRegex;
+	
     public void validateSave(SaveDTO saveDTO) throws ValidationException {
         ValidationResult validationResult = new ValidationResult();
 
@@ -24,27 +22,29 @@ public class TransactionDefinitionServiceValidator {
         }
 
         if(saveDTO.getFromAccountType() == null) {
-            validationResult.addError("transactionFrom", "Transaction from is mandatory.");
-        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getFromAccountType()) < 0) {
-            validationResult.addError("transactionFrom", "Transaction from must be valid.");
+            validationResult.addError("fromAccountType", "From account type is mandatory.");
+        } else if(!Account.Type.contains(saveDTO.getFromAccountType())) {
+            validationResult.addError("fromAccountType", "From account type must be valid.");
         }
 
         if(saveDTO.getToAccountType() == null) {
-            validationResult.addError("transactionTo", "Transaction to is mandatory.");
-        } else if(Arrays.binarySearch(Account.Type.values(), saveDTO.getToAccountType()) < 0) {
-            validationResult.addError("transactionTo", "Transaction to must be valid.");
+            validationResult.addError("toAccountType", "To account type is mandatory.");
+        } else if(!Account.Type.contains(saveDTO.getToAccountType())) {
+            validationResult.addError("toAccountType", "To account type must be valid.");
+        } else if(saveDTO.getFromAccountType().equals(saveDTO.getToAccountType())) {
+        	validationResult.addError("toAccountType", "To account type must not be equal to fromAccountType.");
         }
 
         if(saveDTO.getInterval() == null) {
             validationResult.addError("interval", "Interval is mandatory.");
-        } else if(Arrays.binarySearch(TransactionDefinition.Interval.values(), saveDTO.getInterval()) < 0) {
+        } else if(!TransactionDefinition.Interval.contains(saveDTO.getInterval())) {
             validationResult.addError("interval", "Interval must be valid.");
         }
 
-        if(saveDTO.getApplicableFrom() == null) {
-            validationResult.addError("frpm", "From is mandatory.");
-        } else if(!saveDTO.getApplicableFrom().matches(dateTimeRegex)) {
-            validationResult.addError("from", "From must be valid.");
+        if(saveDTO.getApplicableFromFormatted() == null) {
+            validationResult.addError("applicableFrom", "Applicable from is mandatory.");
+        } else if(!saveDTO.getApplicableFromFormatted().matches(dateTimeRegex)) {
+            validationResult.addError("applicableFrom", "Applicable from must be valid.");
         }
 
         if(saveDTO.getHasParticulars() == null) {

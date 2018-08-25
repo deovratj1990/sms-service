@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
 		validator.validateLogin(loginDTO);
 		
-		String passwordHash = loginDTO.getPassword();//securityService.generateHash(loginDTO.getPassword());
+		String passwordHash = securityService.generateHash(loginDTO.getPassword());
 		
 		User user = userRepository.findByMobileAndPassword(loginDTO.getMobile(), passwordHash);
 		

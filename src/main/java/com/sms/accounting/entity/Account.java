@@ -14,7 +14,17 @@ public class Account {
         ROOM,
         STAFF,
         VENDOR,
-        CUSTOMER
+        CUSTOMER;
+    	
+    	public static boolean contains(String name) {
+    		for(Type type : values()) {
+    			if(type.name().equals(name)) {
+    				return true;
+    			}
+    		}
+    		
+    		return false;
+    	}
     }
 
     @Id

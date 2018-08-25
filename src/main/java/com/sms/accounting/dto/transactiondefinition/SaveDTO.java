@@ -3,7 +3,7 @@ package com.sms.accounting.dto.transactiondefinition;
 import java.util.Set;
 
 public class SaveDTO {
-    public class Particular {
+    public static class Particular {
         private Long costHeaderId;
 
         private Double amount;
@@ -75,6 +75,14 @@ public class SaveDTO {
 
 	public String getApplicableFrom() {
 		return applicableFrom;
+	}
+	
+	public String getApplicableFromFormatted() {
+		if(applicableFrom != null) {
+			return applicableFrom + "T00:00:00+0530";
+		}
+		
+		return null;
 	}
 
 	public void setApplicableFrom(String applicableFrom) {

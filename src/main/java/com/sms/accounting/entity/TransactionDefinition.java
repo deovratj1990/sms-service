@@ -25,10 +25,20 @@ public class TransactionDefinition {
         MONTHLY,
         QUARTERLY,
         HALF_YEARLY,
-        YEARLY
+        YEARLY;
+    	
+    	public static boolean contains(String name) {
+    		for(Interval interval : values()) {
+    			if(interval.name().equals(name)) {
+    				return true;
+    			}
+    		}
+    		
+    		return false;
+    	}
     }
 
-    private enum Status {
+    public enum Status {
         ACTIVE,
         INACTIVE,
         DELETED
@@ -51,7 +61,7 @@ public class TransactionDefinition {
     @Enumerated(EnumType.STRING)
     private Interval interval;
     
-    @Column(name = "fromDate")
+    @Column
     @Convert(converter = ZonedDateTimeConverter.class)
     private ZonedDateTime applicableFrom;
     

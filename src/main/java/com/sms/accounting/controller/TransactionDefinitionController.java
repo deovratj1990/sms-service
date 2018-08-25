@@ -34,8 +34,8 @@ public class TransactionDefinitionController {
         	
         	data.put("transactionDefinitions", transactionDefinitionService.readAll());
         	
-            responseDTO.setCode(HttpStatus.CREATED.value());
-            responseDTO.setMessage("Transaction definition created successfully.");
+            responseDTO.setCode(HttpStatus.OK.value());
+            responseDTO.setMessage("Successful.");
             responseDTO.setData(data);
         } catch(ValidationException ex) {
             responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
@@ -57,8 +57,8 @@ public class TransactionDefinitionController {
         	
         	data.put("transactionDefinition", transactionDefinitionService.read(id));
         	
-            responseDTO.setCode(HttpStatus.CREATED.value());
-            responseDTO.setMessage("Transaction definition created successfully.");
+            responseDTO.setCode(HttpStatus.OK.value());
+            responseDTO.setMessage("Successful.");
             responseDTO.setData(data);
         } catch(ValidationException ex) {
             responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
@@ -72,7 +72,7 @@ public class TransactionDefinitionController {
     }
 
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public ResponseEntity<ResponseDTO> create(SaveDTO saveDTO) {
+    public ResponseEntity<ResponseDTO> create(@RequestBody SaveDTO saveDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
 
         try {
@@ -127,7 +127,7 @@ public class TransactionDefinitionController {
         try {
         	transactionDefinitionService.delete(id);
         	
-            responseDTO.setCode(HttpStatus.OK.value());
+            responseDTO.setCode(HttpStatus.NO_CONTENT.value());
             responseDTO.setMessage("Transaction definition deleted successfully.");
         } catch(ValidationException ex) {
             responseDTO.setCode(HttpStatus.BAD_REQUEST.value());
